@@ -1,3 +1,5 @@
+/* eslint-env mocha */
+
 'use strict';
 
 const expect = require('expect');
@@ -43,26 +45,26 @@ describe('Reader', () => {
 
     describe('.input().write(commandPayload)', () => {
 
-        const writeBufferStepByStep = (stream, buffer) => {
-            for (const chunk of buffer) {
-                stream.write(Buffer.from([chunk]));
-            }
-        };
-
-        const writeAndOnceData = (reader, frameBuffer) => {
+        const writeAndOnceData = (reader, frameBuffer, stepByStep) => {
             return new Promise((resolve) => {
                 reader.output().once('data', (data) => {
                     resolve(data);
                 });
                 setImmediate(() => {
-                    writeBufferStepByStep(reader.input(), frameBuffer);
+                    if (stepByStep) {
+                        for (const chunk of frameBuffer) {
+                            reader.input().write(Buffer.from([chunk]));
+                        }
+                    } else {
+                        reader.input().write(frameBuffer);
+                    }
                 });
             });
         };
 
-        it('<read response test>: 0x52420a000111510100ffffffe250', () => {
+        it('<read response test>', () => {
             const reader = Reader();
-            return writeAndOnceData(reader, Buffer.from('52420a000111510100ffffffe250', 'hex')).then((responsePayload) => {
+            return writeAndOnceData(reader, Buffer.from('52420a000111510100ffffffe250', 'hex'), true).then((responsePayload) => {
                 expect(responsePayload).toEqual({
                     command: 'read',
                     address: 'ledSettingNormalState',
@@ -76,9 +78,9 @@ describe('Reader', () => {
             });
         });
 
-        it('<write response test>: 0x52420a000211510100ffffffa245', () => {
+        it('<write response test>', () => {
             const reader = Reader();
-            return writeAndOnceData(reader, Buffer.from('52420a000211510100ffffffa245', 'hex')).then((responsePayload) => {
+            return writeAndOnceData(reader, Buffer.from('52420a000211510100ffffffa245', 'hex'), true).then((responsePayload) => {
                 expect(responsePayload).toEqual({
                     command: 'write',
                     address: 'ledSettingNormalState',
@@ -92,104 +94,64 @@ describe('Reader', () => {
             });
         });
 
-        it('<read error response test>: 0x524206008111510122e5', () => {
+        it('<read error response test>', () => {
             const reader = Reader();
-            return writeAndOnceData(reader, Buffer.from('524206008111510122e5', 'hex')).then((responsePayload) => {
+            return writeAndOnceData(reader, Buffer.from('524206008111510122e5', 'hex'), true).then((responsePayload) => {
                 expect(responsePayload).toEqual({
                     command: 'readError',
                     address: 'ledSettingNormalState',
                     data: {
-                        code: 0x01,
+                        code: {
+                            _rawValue: 0x01,
+                            crcError: true,
+                            commandError: false,
+                            addressError: false,
+                            lengthError: false,
+                            dataError: false,
+                            busy: false,
+                        },
                     },
                 });
             });
         });
 
-        it('<write error response test>: 0x524206008211510122a1', () => {
+        it('<write error response test>', () => {
             const reader = Reader();
-            return writeAndOnceData(reader, Buffer.from('524206008211510122a1', 'hex')).then((responsePayload) => {
+            return writeAndOnceData(reader, Buffer.from('524206008211510122a1', 'hex'), true).then((responsePayload) => {
                 expect(responsePayload).toEqual({
                     command: 'writeError',
                     address: 'ledSettingNormalState',
                     data: {
-                        code: 0x01,
+                        code: {
+                            _rawValue: 0x01,
+                            crcError: true,
+                            commandError: false,
+                            addressError: false,
+                            lengthError: false,
+                            dataError: false,
+                            busy: false,
+                        },
                     },
                 });
             });
         });
 
-        it('<unknown response test>: 0x52420600ff1151ffbb4d', () => {
+        it('<unknown response test>', () => {
             const reader = Reader();
-            return writeAndOnceData(reader, Buffer.from('52420600ff1151ffbb4d', 'hex')).then((responsePayload) => {
+            return writeAndOnceData(reader, Buffer.from('52420600ff1151ffbb4d', 'hex'), true).then((responsePayload) => {
                 expect(responsePayload).toEqual({
                     command: 'unknown',
                     address: 'ledSettingNormalState',
                     data: {
-                        code: 0xff,
-                    },
-                });
-            });
-        });
-
-        it('<sync test 1>: 0x1234567852420a000211510100ffffffa245', () => {
-            const reader = Reader();
-            return writeAndOnceData(reader, Buffer.from('1234567852420a000211510100ffffffa245', 'hex')).then((responsePayload) => {
-                expect(responsePayload).toEqual({
-                    command: 'write',
-                    address: 'ledSettingNormalState',
-                    data: {
-                        displayRuleNormalState: 1,
-                        intensityOfLedRed: 255,
-                        intensityOfLedGreen: 255,
-                        intensityOfLedBlue: 255,
-                    },
-                });
-            });
-        });
-
-        it('<sync test 2>: 0x52420a0052420a000211510100ffffffa245', () => {
-            const reader = Reader();
-            return writeAndOnceData(reader, Buffer.from('52420a0052420a000211510100ffffffa245', 'hex')).then((responsePayload) => {
-                expect(responsePayload).toEqual({
-                    command: 'write',
-                    address: 'ledSettingNormalState',
-                    data: {
-                        displayRuleNormalState: 1,
-                        intensityOfLedRed: 255,
-                        intensityOfLedGreen: 255,
-                        intensityOfLedBlue: 255,
-                    },
-                });
-            });
-        });
-
-        it('<crc test 1>: 0x52420a000211510100ffffff000052420a000211510100ffffffa245', () => {
-            const reader = Reader();
-            return writeAndOnceData(reader, Buffer.from('52420a000211510100ffffff000052420a000211510100ffffffa245', 'hex')).then((responsePayload) => {
-                expect(responsePayload).toEqual({
-                    command: 'write',
-                    address: 'ledSettingNormalState',
-                    data: {
-                        displayRuleNormalState: 1,
-                        intensityOfLedRed: 255,
-                        intensityOfLedGreen: 255,
-                        intensityOfLedBlue: 255,
-                    },
-                });
-            });
-        });
-
-        it('<crc test 2>: 0x52420a000211511234ffffffa24552420a000211510100ffffffa245', () => {
-            const reader = Reader();
-            return writeAndOnceData(reader, Buffer.from('52420a000211511234ffffffa24552420a000211510100ffffffa245', 'hex')).then((responsePayload) => {
-                expect(responsePayload).toEqual({
-                    command: 'write',
-                    address: 'ledSettingNormalState',
-                    data: {
-                        displayRuleNormalState: 1,
-                        intensityOfLedRed: 255,
-                        intensityOfLedGreen: 255,
-                        intensityOfLedBlue: 255,
+                        code: {
+                            _rawValue: 0xff,
+                            crcError: false,
+                            commandError: false,
+                            addressError: false,
+                            lengthError: false,
+                            dataError: false,
+                            busy: false,
+                        },
                     },
                 });
             });

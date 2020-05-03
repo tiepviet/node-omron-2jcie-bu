@@ -1,6 +1,6 @@
 {
   "name": "node-omron-2jcie-bu",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "",
   "main": "index.js",
   "directories": {
@@ -8,8 +8,8 @@
     "test": "test"
   },
   "scripts": {
-    "nyc": "nyc --reporter=lcov --reporter=text mocha",
-    "c8": "c8 --reporter=lcov --reporter=text mocha"
+    "eslint": "eslint",
+    "test": "nyc --reporter=lcov --reporter=text mocha"
   },
   "repository": {
     "type": "git",
@@ -26,7 +26,8 @@
     "serialport": "^8.0.7"
   },
   "devDependencies": {
-    "c8": "^7.1.1",
+    "@serialport/binding-mock": "^8.0.6",
+    "eslint": "^6.8.0",
     "expect": "^25.5.0",
     "mocha": "^7.1.2",
     "nyc": "^15.0.1"

@@ -1,14 +1,20 @@
+/* eslint-env mocha */
+
 'use strict';
 
 const expect = require('expect');
 
 const stream = require('stream');
 
+const ChannelVirtual = require('./channel-virtual');
+
 const Channel = require('../lib/channel');
 
 describe('Channel', () => {
 
-    const channel = Channel({ path: '/dev/ttys000' });
+    const channel = Channel({
+        path: ChannelVirtual,
+    });
 
     describe('.privateScope()', () => {
 

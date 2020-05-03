@@ -1,3 +1,5 @@
+/* eslint-env mocha */
+
 'use strict';
 
 const expect = require('expect');
@@ -54,7 +56,7 @@ describe('Writer', () => {
             });
         };
 
-        it('<read command test>: { read, ledSettingNormalState, {} }', () => {
+        it('<read command test>', () => {
             const writer = Writer();
             return writeAndOnceData(writer, {
                 command: 'read',
@@ -65,7 +67,7 @@ describe('Writer', () => {
             });
         });
 
-        it('<write command test>: { write, ledSettingNormalState, { 1, 255, 255, 255 } }', () => {
+        it('<write command test>', () => {
             const writer = Writer();
             return writeAndOnceData(writer, {
                 command: 'write',

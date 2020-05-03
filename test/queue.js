@@ -1,3 +1,5 @@
+/* eslint-env mocha */
+
 'use strict';
 
 const expect = require('expect');
@@ -132,10 +134,10 @@ describe('Queue', () => {
                 command: 'read',
                 address: 'ledSettingNormalState',
                 data: {},
-            }).then((responsePayload) => {
+            }).then((_responsePayload) => {
                 throw new Error();
             }, (error) => {
-                expect(error.readError).toBe(true);
+                expect(error.command).toBe('readError');
             });
         });
 
@@ -161,10 +163,10 @@ describe('Queue', () => {
                     intensityOfLedGreen: 255,
                     intensityOfLedBlue: 255,
                 },
-            }).then((responsePayload) => {
+            }).then((_responsePayload) => {
                 throw new Error();
             }, (error) => {
-                expect(error.writeError).toBe(true);
+                expect(error.command).toBe('writeError');
             });
         });
 
@@ -190,10 +192,10 @@ describe('Queue', () => {
                     intensityOfLedGreen: 255,
                     intensityOfLedBlue: 255,
                 },
-            }).then((responsePayload) => {
+            }).then((_responsePayload) => {
                 throw new Error();
             }, (error) => {
-                expect(error.unknown).toBe(true);
+                expect(error.command).toBe('unknown');
             });
         });
 
@@ -267,14 +269,14 @@ describe('Queue', () => {
                     intensityOfLedGreen: 255,
                     intensityOfLedBlue: 255,
                 },
-            }).then((responsePayload) => {
+            }).then((_responsePayload) => {
                 throw new Error();
             }, (error) => {
                 expect(error.timeout).toBe(true);
             });
         });
 
-        it('<disorder test>', (callback) => {
+        it('<disorder>', (callback) => {
             const queue = Queue();
             queue.input().write({
                 command: 'write',
