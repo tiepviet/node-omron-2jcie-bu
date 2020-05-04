@@ -8,11 +8,146 @@
 [![devDependencies Status](https://david-dm.org/e53e04ac/node-omron-2jcie-bu/dev-status.svg)](https://david-dm.org/e53e04ac/node-omron-2jcie-bu?type=dev)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
+[OMRON 2JCIE-BU](https://www.fa.omron.co.jp/products/family/3724/) Controller for Node.js (**UNOFFICIAL**)
+
+-----
+
+## Requirements
+
+- [Raspberry PI](https://www.raspberrypi.org/)
+
+- [OMRON 2JCIE-BU](https://www.fa.omron.co.jp/products/family/3724/)
+
+- [Node.js](https://nodejs.org/en/) (v10, v12, v13, v14)
+
+-----
+
+## Installation
+
+run the command:
+
 ~~~~~ sh
-git clone https://github.com/e53e04ac/node-omron-2jcie-bu.git
-cd node-omron-2jcie-bu
-npm install
-chmod 755 activate.sh
-./activate.sh
-node main.js
+npm install @e53e04ac/node-omron-2jcie-bu
 ~~~~~
+
+-----
+
+## Examples
+
+### Set LED light color
+
+1. save a file: `example-set-led-light-color.js`
+
+    ~~~~~ js
+    const omron2jciebu = require('@e53e04ac/node-omron-2jcie-bu');
+
+    (async () => {
+
+        const controller = omron2jciebu({ path: '/dev/ttyUSB0' });
+
+        await controller.open();
+
+        await controller.ledSettingNormalState.write({
+            displayRuleNormalState: 0x0001,
+            intensityOfLedRed: 0,
+            intensityOfLedGreen: 255,
+            intensityOfLedBlue: 0,
+        });
+
+        await controller.close();
+
+    })();
+    ~~~~~
+
+2. execute commands and the script
+
+    ~~~~~ sh
+    sudo modprobe ftdi_sio
+    sudo chmod 777 /sys/bus/usb-serial/drivers/ftdi_sio/new_id
+    sudo echo 0590 00d4 > /sys/bus/usb-serial/drivers/ftdi_sio/new_id
+
+    node example-set-led-light-color.js
+    ~~~~~
+
+    the LED light will turn green.
+
+### Get sensor data
+
+1. save a file: `example-get-sensor-data.js`
+
+    ~~~~~ js
+    const omron2jciebu = require('@e53e04ac/node-omron-2jcie-bu');
+
+    (async () => {
+
+        const controller = omron2jciebu({ path: '/dev/ttyUSB0' });
+
+        await controller.open();
+
+        const latestData = await controller.latestDataLong.read({});
+
+        console.log(latestData);
+
+        await controller.close();
+
+    })();
+    ~~~~~
+
+2. execute commands and the script
+
+    ~~~~~ sh
+    sudo modprobe ftdi_sio
+    sudo chmod 777 /sys/bus/usb-serial/drivers/ftdi_sio/new_id
+    sudo echo 0590 00d4 > /sys/bus/usb-serial/drivers/ftdi_sio/new_id
+
+    node example-get-sensor-data.js
+    ~~~~~
+
+    you will get a sensor data, like this:
+
+    ~~~~~
+    {
+        sequenceNumber: 218,
+        temperature: 3284,
+        relativeHumidity: 4164,
+        ambientLight: 0,
+        barometricPressure: 1009805,
+        soundNoise: 6167,
+        etvoc: 514,
+        eco2: 1849,
+        discomfortIndex: 8048,
+        heatStroke: 2666,
+        vibrationInformation: 0,
+        siValue: 0,
+        pga: 0,
+        seismicIntensity: 0,
+        temperatureFlag: 0,
+        relativeHumidityFlag: 0,
+        ambientLightFlag: 0,
+        barometricPressureFlag: 0,
+        soundNoiseFlag: 0,
+        etvocFlag: 0,
+        eco2Flag: 0,
+        discomfortIndexFlag: 0,
+        heatStrokeFlag: 0,
+        siValueFlag: 0,
+        pgaFlag: 0,
+        seismicIntensityFlag: 0
+    }
+    ~~~~~
+
+-----
+
+## Documentation
+
+- [API](docs/api)
+
+- [Internal API](docs/internal-api)
+
+-----
+
+## License
+
+- [MIT](LICENSE)
+
+-----
