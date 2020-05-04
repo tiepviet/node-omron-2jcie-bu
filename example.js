@@ -1,5 +1,5 @@
 /**
- * node-omron-2jcie-bu/main.js
+ * node-omron-2jcie-bu/example.js
  * Copyright (C) e53e04ac
  * MIT License
  */
@@ -26,7 +26,7 @@ async function main() {
         displayRuleNormalState: 0x0001,
         intensityOfLedRed: 0,
         intensityOfLedGreen: 255,
-        intensityOfLedBlue: 0
+        intensityOfLedBlue: 0,
     });
 
     await new Promise((resolve) => {
@@ -98,7 +98,7 @@ async function main() {
         displayRuleNormalState: 0x0001,
         intensityOfLedRed: 255,
         intensityOfLedGreen: 0,
-        intensityOfLedBlue: 0
+        intensityOfLedBlue: 0,
     });
 
     await controller.close();
