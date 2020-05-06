@@ -1,6 +1,6 @@
 {
   "name": "@e53e04ac/node-omron-2jcie-bu",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "OMRON 2JCIE-BU Controller for Node.js (UNOFFICIAL)",
   "main": "index.js",
   "directories": {

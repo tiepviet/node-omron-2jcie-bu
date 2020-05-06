@@ -1,5 +1,5 @@
 /**
- * node-omron-2jcie-bu/example.js
+ * node-omron-2jcie-bu/examples/main.js
  * Copyright (C) e53e04ac
  * MIT License
  */

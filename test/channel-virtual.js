@@ -3,11 +3,6 @@
 /**
  * @private
  */
-const stream = require('stream');
-
-/**
- * @private
- */
 const MockBinding = require('@serialport/binding-mock');
 
 /**
@@ -23,7 +18,7 @@ const Addresses = require('../lib/addresses');
 /**
  * @private
  */
-const Units = require('../lib/units');
+const Contents = require('../lib/contents');
 
 /**
  * @private
@@ -49,12 +44,14 @@ const ChannelVirtual = (options) => {
         write(buffer) {
             return new Promise((resolve, _reject) => {
                 this.buffer = Buffer.concat([this.buffer, buffer]);
-                const frames = Utilities.readAcceptableFramesFromBuffer(this.buffer);
-                if (frames.length > 0) {
-                    const frame = frames.slice(-1)[0];
-                    this.buffer = this.buffer.slice(frame.frameOffset + frame.frameLength);
-                    for (const frame of frames) {
-                        const commandFrame = Utilities.privateScope().unpackFrame(frame.frameBuffer);
+                const acceptableFrameRanges = Utilities.findAcceptableFrameRangesInBuffer(this.buffer);
+                if (acceptableFrameRanges.length > 0) {
+                    const lastAcceptableRange = acceptableFrameRanges.slice(-1)[0];
+                    const buffer = this.buffer.slice(0, lastAcceptableRange.end);
+                    this.buffer = this.buffer.slice(lastAcceptableRange.end);
+                    for (const acceptableFrameRange of acceptableFrameRanges) {
+                        const frameBuffer = buffer.slice(acceptableFrameRange.start, acceptableFrameRange.end);
+                        const commandFrame = Utilities.privateScope().unpackFrame(frameBuffer);
                         const commandPayload = Utilities.privateScope().unpackPayload(commandFrame.payloadBuffer);
                         const commandType = Commands.find(commandPayload.commandValue);
                         const addressType = Addresses.find(commandPayload.addressValue);
@@ -62,21 +59,21 @@ const ChannelVirtual = (options) => {
                         const commandData = Utilities.privateScope().unpackData(commandDataType, commandPayload.dataBuffer);
                         const responseDataType = Utilities.privateScope().selectResponseDataType(addressType, commandType);
                         const responseData = {};
-                        for (const field of responseDataType.fields) {
-                            const unitType = Units.find(field.unit);
-                            switch (field.format) {
+                        for (const fieldType of responseDataType.fieldTypes) {
+                            const contentType = Contents.find(fieldType.content);
+                            switch (fieldType.format) {
                                 case 'SInt16':
                                 case 'SInt32':
                                 case 'UInt8':
                                 case 'UInt16':
                                 case 'UInt32':
-                                    responseData[field.name] = unitType.encode(0);
+                                    responseData[fieldType.name] = contentType.encode(0);
                                     break;
                                 case 'UInt64':
-                                    responseData[field.name] = unitType.encode(BigInt(0));
+                                    responseData[fieldType.name] = contentType.encode(BigInt(0));
                                     break;
                                 case 'Utf8s':
-                                    responseData[field.name] = unitType.encode('');
+                                    responseData[fieldType.name] = contentType.encode('');
                             }
                         }
                         const responseDataBuffer = Utilities.privateScope().packData(responseDataType, responseData);

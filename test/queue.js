@@ -14,7 +14,7 @@ describe('Queue', () => {
 
         const queue = Queue();
 
-        it('<empty>', () => {
+        it('<type test>', () => {
             const privateScope = queue.privateScope();
             expect(privateScope).toBeInstanceOf(Object);
         });
@@ -25,7 +25,7 @@ describe('Queue', () => {
 
         const queue = Queue();
 
-        it('<empty>', () => {
+        it('<type test>', () => {
             const input = queue.input();
             expect(input).toBeInstanceOf(stream.Stream);
         });
@@ -36,7 +36,7 @@ describe('Queue', () => {
 
         const queue = Queue();
 
-        it('<empty>', () => {
+        it('<type test>', () => {
             const output = queue.output();
             expect(output).toBeInstanceOf(stream.Stream);
         });
@@ -45,11 +45,16 @@ describe('Queue', () => {
 
     describe('.enqueue(commandPayload)', () => {
 
-        it('<read command test>', () => {
+        it('<read response test>', () => {
             const queue = Queue();
-            queue.output().once('data', () => {
+            const task = queue.enqueue({
+                command: 'read',
+                address: 'ledSettingNormalState',
+                data: {},
+            });
+            queue.input().once('data', () => {
                 setTimeout(() => {
-                    queue.input().write({
+                    queue.output().write({
                         command: 'read',
                         address: 'ledSettingNormalState',
                         data: {
@@ -61,31 +66,37 @@ describe('Queue', () => {
                     });
                 }, 50);
             });
-            return queue.enqueue({
-                command: 'read',
-                address: 'ledSettingNormalState',
-                data: {},
-            }).then((responsePayload) => {
-                expect(responsePayload).toEqual({
-                    command: 'read',
-                    address: 'ledSettingNormalState',
-                    data: {
-                        displayRuleNormalState: 1,
-                        intensityOfLedRed: 255,
-                        intensityOfLedGreen: 255,
-                        intensityOfLedBlue: 255,
-                    },
-                });
-            }, (error) => {
-                throw error;
+            return task.promise.then((responsePayloads) => {
+                expect(responsePayloads).toEqual([
+                    {
+                        command: 'read',
+                        address: 'ledSettingNormalState',
+                        data: {
+                            displayRuleNormalState: 1,
+                            intensityOfLedRed: 255,
+                            intensityOfLedGreen: 255,
+                            intensityOfLedBlue: 255,
+                        },
+                    }
+                ]);
             });
         });
 
-        it('<write command test>', () => {
+        it('<write response test>', () => {
             const queue = Queue();
-            queue.output().once('data', () => {
+            const task = queue.enqueue({
+                command: 'write',
+                address: 'ledSettingNormalState',
+                data: {
+                    displayRuleNormalState: 1,
+                    intensityOfLedRed: 255,
+                    intensityOfLedGreen: 255,
+                    intensityOfLedBlue: 255,
+                },
+            });
+            queue.input().once('data', () => {
                 setTimeout(() => {
-                    queue.input().write({
+                    queue.output().write({
                         command: 'write',
                         address: 'ledSettingNormalState',
                         data: {
@@ -97,31 +108,32 @@ describe('Queue', () => {
                     });
                 }, 50);
             });
-            return queue.enqueue({
-                command: 'write',
-                address: 'ledSettingNormalState',
-                data: {},
-            }).then((responsePayload) => {
-                expect(responsePayload).toEqual({
-                    command: 'write',
-                    address: 'ledSettingNormalState',
-                    data: {
-                        displayRuleNormalState: 1,
-                        intensityOfLedRed: 255,
-                        intensityOfLedGreen: 255,
-                        intensityOfLedBlue: 255,
-                    },
-                });
-            }, (error) => {
-                throw error;
+            return task.promise.then((responsePayloads) => {
+                expect(responsePayloads).toEqual([
+                    {
+                        command: 'write',
+                        address: 'ledSettingNormalState',
+                        data: {
+                            displayRuleNormalState: 1,
+                            intensityOfLedRed: 255,
+                            intensityOfLedGreen: 255,
+                            intensityOfLedBlue: 255,
+                        },
+                    }
+                ]);
             });
         });
 
-        it('<read error command test>', () => {
+        it('<read error response test>', () => {
             const queue = Queue();
-            queue.output().once('data', () => {
+            const task = queue.enqueue({
+                command: 'read',
+                address: 'ledSettingNormalState',
+                data: {},
+            })
+            queue.input().once('data', () => {
                 setTimeout(() => {
-                    queue.input().write({
+                    queue.output().write({
                         command: 'readError',
                         address: 'ledSettingNormalState',
                         data: {
@@ -130,22 +142,34 @@ describe('Queue', () => {
                     });
                 }, 50);
             });
-            return queue.enqueue({
-                command: 'read',
-                address: 'ledSettingNormalState',
-                data: {},
-            }).then((_responsePayload) => {
-                throw new Error();
-            }, (error) => {
-                expect(error.command).toBe('readError');
+            return task.promise.then((responsePayloads) => {
+                expect(responsePayloads).toEqual([
+                    {
+                        command: 'readError',
+                        address: 'ledSettingNormalState',
+                        data: {
+                            code: 0x01,
+                        },
+                    }
+                ]);
             });
         });
 
-        it('<write error command test>', () => {
+        it('<write error response test>', () => {
             const queue = Queue();
-            queue.output().once('data', () => {
+            const task = queue.enqueue({
+                command: 'write',
+                address: 'ledSettingNormalState',
+                data: {
+                    displayRuleNormalState: 1,
+                    intensityOfLedRed: 255,
+                    intensityOfLedGreen: 255,
+                    intensityOfLedBlue: 255,
+                },
+            });
+            queue.input().once('data', () => {
                 setTimeout(() => {
-                    queue.input().write({
+                    queue.output().write({
                         command: 'writeError',
                         address: 'ledSettingNormalState',
                         data: {
@@ -154,7 +178,22 @@ describe('Queue', () => {
                     });
                 }, 50);
             });
-            return queue.enqueue({
+            return task.promise.then((responsePayloads) => {
+                expect(responsePayloads).toEqual([
+                    {
+                        command: 'writeError',
+                        address: 'ledSettingNormalState',
+                        data: {
+                            code: 0x01,
+                        },
+                    }
+                ]);
+            });
+        });
+
+        it('<unknown response test>', () => {
+            const queue = Queue();
+            const task = queue.enqueue({
                 command: 'write',
                 address: 'ledSettingNormalState',
                 data: {
@@ -163,18 +202,10 @@ describe('Queue', () => {
                     intensityOfLedGreen: 255,
                     intensityOfLedBlue: 255,
                 },
-            }).then((_responsePayload) => {
-                throw new Error();
-            }, (error) => {
-                expect(error.command).toBe('writeError');
             });
-        });
-
-        it('<unknown command test>', () => {
-            const queue = Queue();
-            queue.output().once('data', () => {
+            queue.input().once('data', () => {
                 setTimeout(() => {
-                    queue.input().write({
+                    queue.output().write({
                         command: 'unknown',
                         address: 'ledSettingNormalState',
                         data: {
@@ -183,24 +214,122 @@ describe('Queue', () => {
                     });
                 }, 50);
             });
-            return queue.enqueue({
-                command: 'write',
-                address: 'ledSettingNormalState',
+            return task.promise.then((responsePayloads) => {
+                expect(responsePayloads).toEqual([
+                    {
+                        command: 'unknown',
+                        address: 'ledSettingNormalState',
+                        data: {
+                            code: 0x01,
+                        },
+                    }
+                ]);
+            });
+        });
+
+        it('<multiple responses test>', () => {
+            const queue = Queue();
+            const task = queue.enqueue({
+                command: 'read',
+                address: 'memoryDataShort',
                 data: {
-                    displayRuleNormalState: 1,
-                    intensityOfLedRed: 255,
-                    intensityOfLedGreen: 255,
-                    intensityOfLedBlue: 255,
+                    memoryIndexStart: 1,
+                    memoryIndexEnd: 2,
                 },
-            }).then((_responsePayload) => {
-                throw new Error();
-            }, (error) => {
-                expect(error.command).toBe('unknown');
+            });
+            queue.input().once('data', () => {
+                setTimeout(() => {
+                    queue.output().write({
+                        command: 'read',
+                        address: 'memoryDataShort',
+                        data: {
+                            memoryIndex: 1,
+                            timeCounter: 0,
+                            temperature: 0,
+                            relativeHumidity: 0,
+                            ambientLight: 0,
+                            barometricPressure: 0,
+                            soundNoise: 0,
+                            etvoc: 0,
+                            eco2: 0,
+                            discomfortIndex: 0,
+                            heatStroke: 0,
+                        },
+                    });
+                    setTimeout(() => {
+                        queue.output().write({
+                            command: 'read',
+                            address: 'memoryDataShort',
+                            data: {
+                                memoryIndex: 2,
+                                timeCounter: 0,
+                                temperature: 0,
+                                relativeHumidity: 0,
+                                ambientLight: 0,
+                                barometricPressure: 0,
+                                soundNoise: 0,
+                                etvoc: 0,
+                                eco2: 0,
+                                discomfortIndex: 0,
+                                heatStroke: 0,
+                            },
+                        });
+                    }, 50);
+                }, 50);
+            });
+            return task.promise.then((responsePayloads) => {
+                expect(responsePayloads).toEqual([
+                    {
+                        command: 'read',
+                        address: 'memoryDataShort',
+                        data: {
+                            memoryIndex: 1,
+                            timeCounter: 0,
+                            temperature: 0,
+                            relativeHumidity: 0,
+                            ambientLight: 0,
+                            barometricPressure: 0,
+                            soundNoise: 0,
+                            etvoc: 0,
+                            eco2: 0,
+                            discomfortIndex: 0,
+                            heatStroke: 0,
+                        },
+                    },
+                    {
+                        command: 'read',
+                        address: 'memoryDataShort',
+                        data: {
+                            memoryIndex: 2,
+                            timeCounter: 0,
+                            temperature: 0,
+                            relativeHumidity: 0,
+                            ambientLight: 0,
+                            barometricPressure: 0,
+                            soundNoise: 0,
+                            etvoc: 0,
+                            eco2: 0,
+                            discomfortIndex: 0,
+                            heatStroke: 0,
+                        },
+                    },
+                ]);
             });
         });
 
         it('<busy test>', () => {
             const queue = Queue();
+            const tasks = [];
+            tasks.push(queue.enqueue({
+                command: 'read',
+                address: 'ledSettingNormalState',
+                data: {},
+            }));
+            tasks.push(queue.enqueue({
+                command: 'read',
+                address: 'ledSettingNormalState',
+                data: {},
+            }));
             queue.output().on('data', () => {
                 setTimeout(() => {
                     queue.input().write({
@@ -215,52 +344,27 @@ describe('Queue', () => {
                     });
                 }, 50);
             });
-            return Promise.all([
-                queue.enqueue({
-                    command: 'read',
-                    address: 'ledSettingNormalState',
-                    data: {},
-                }).then((responsePayload) => {
-                    expect(responsePayload).toEqual({
-                        command: 'read',
-                        address: 'ledSettingNormalState',
-                        data: {
-                            displayRuleNormalState: 1,
-                            intensityOfLedRed: 255,
-                            intensityOfLedGreen: 255,
-                            intensityOfLedBlue: 255,
-                        },
-                    });
-                }, (error) => {
-                    throw error;
-                }),
-                queue.enqueue({
-                    command: 'read',
-                    address: 'ledSettingNormalState',
-                    data: {},
-                }).then((responsePayload) => {
-                    expect(responsePayload).toEqual({
-                        command: 'read',
-                        address: 'ledSettingNormalState',
-                        data: {
-                            displayRuleNormalState: 1,
-                            intensityOfLedRed: 255,
-                            intensityOfLedGreen: 255,
-                            intensityOfLedBlue: 255,
-                        },
-                    });
-                }, (error) => {
-                    throw error;
-                }),
-            ]);
+            return Promise.all(tasks.map((task) => {
+                return task.promise.then((responsePayloads) => {
+                    expect(responsePayloads).toEqual([
+                        {
+                            command: 'read',
+                            address: 'ledSettingNormalState',
+                            data: {
+                                displayRuleNormalState: 1,
+                                intensityOfLedRed: 255,
+                                intensityOfLedGreen: 255,
+                                intensityOfLedBlue: 255,
+                            },
+                        }
+                    ]);
+                });
+            }));
         });
 
-        it('<timeout test>', () => {
+        it('<timeout response test>', () => {
             const queue = Queue();
-            queue.output().once('data', () => {
-                // noop
-            });
-            return queue.enqueue({
+            const task = queue.enqueue({
                 command: 'write',
                 address: 'ledSettingNormalState',
                 data: {
@@ -269,14 +373,73 @@ describe('Queue', () => {
                     intensityOfLedGreen: 255,
                     intensityOfLedBlue: 255,
                 },
-            }).then((_responsePayload) => {
+            });
+            queue.input().once('data', () => {
+                // noop
+            });
+            return task.promise.then((_responsePayloads) => {
                 throw new Error();
             }, (error) => {
-                expect(error.timeout).toBe(true);
+                expect(error).toEqual({
+                    timeout: true,
+                });
             });
         });
 
-        it('<disorder>', (callback) => {
+        it('<abort test>', () => {
+            const queue = Queue();
+            const task = queue.enqueue({
+                command: 'write',
+                address: 'ledSettingNormalState',
+                data: {
+                    displayRuleNormalState: 1,
+                    intensityOfLedRed: 255,
+                    intensityOfLedGreen: 255,
+                    intensityOfLedBlue: 255,
+                },
+            });
+            queue.output().once('data', () => {
+                setImmediate(() => {
+                    task.abort();
+                });
+            });
+            return task.promise.then((_responsePayloads) => {
+                throw new Error();
+            }, (error) => {
+                expect(error).toEqual({
+                    abort: true,
+                });
+            });
+        });
+
+        it('<abort twice test>', () => {
+            const queue = Queue();
+            const task = queue.enqueue({
+                command: 'write',
+                address: 'ledSettingNormalState',
+                data: {
+                    displayRuleNormalState: 1,
+                    intensityOfLedRed: 255,
+                    intensityOfLedGreen: 255,
+                    intensityOfLedBlue: 255,
+                },
+            });
+            queue.output().once('data', () => {
+                setImmediate(() => {
+                    task.abort();
+                    task.abort();
+                });
+            });
+            return task.promise.then((_responsePayloads) => {
+                throw new Error();
+            }, (error) => {
+                expect(error).toEqual({
+                    abort: true,
+                });
+            });
+        });
+
+        it('<disordered response test>', () => {
             const queue = Queue();
             queue.input().write({
                 command: 'write',
@@ -288,7 +451,6 @@ describe('Queue', () => {
                     intensityOfLedBlue: 255,
                 },
             });
-            callback();
         });
 
     });

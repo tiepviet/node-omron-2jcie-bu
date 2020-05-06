@@ -10,7 +10,7 @@ describe('Commands', () => {
 
     describe('.privateScope()', () => {
 
-        it('<empty>', () => {
+        it('<type test>', () => {
             const privateScope = Commands.privateScope();
             expect(privateScope).toBeInstanceOf(Object);
         });

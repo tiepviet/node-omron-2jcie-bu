@@ -10,17 +10,17 @@ describe('Utilities', () => {
 
     describe('.privateScope()', () => {
 
-        it('<empty>', () => {
+        it('<type test>', () => {
             const privateScope = Utilities.privateScope();
             expect(privateScope).toBeInstanceOf(Object);
         });
 
     });
 
-    describe('.packCommandPayloadInFrameBuffer(commandPayload)', () => {
+    describe('.packCommandPayloadIntoFrameBuffer(commandPayload)', () => {
 
         it('<read command test>', () => {
-            const frameBuffer = Utilities.packCommandPayloadInFrameBuffer({
+            const frameBuffer = Utilities.packCommandPayloadIntoFrameBuffer({
                 command: 'read',
                 address: 'ledSettingNormalState',
                 data: {},
@@ -29,7 +29,7 @@ describe('Utilities', () => {
         });
 
         it('<write command test>', () => {
-            const frameBuffer = Utilities.packCommandPayloadInFrameBuffer({
+            const frameBuffer = Utilities.packCommandPayloadIntoFrameBuffer({
                 command: 'write',
                 address: 'ledSettingNormalState',
                 data: {
@@ -81,13 +81,8 @@ describe('Utilities', () => {
                 address: 'ledSettingNormalState',
                 data: {
                     code: {
-                        _rawValue: 0x01,
+                        raw: 0x01,
                         crcError: true,
-                        commandError: false,
-                        addressError: false,
-                        lengthError: false,
-                        dataError: false,
-                        busy: false,
                     },
                 },
             });
@@ -100,13 +95,8 @@ describe('Utilities', () => {
                 address: 'ledSettingNormalState',
                 data: {
                     code: {
-                        _rawValue: 0x01,
+                        raw: 0x01,
                         crcError: true,
-                        commandError: false,
-                        addressError: false,
-                        lengthError: false,
-                        dataError: false,
-                        busy: false,
                     },
                 },
             });
@@ -119,13 +109,7 @@ describe('Utilities', () => {
                 address: 'ledSettingNormalState',
                 data: {
                     code: {
-                        _rawValue: 0xff,
-                        crcError: false,
-                        commandError: false,
-                        addressError: false,
-                        lengthError: false,
-                        dataError: false,
-                        busy: false,
+                        raw: 0xff,
                     },
                 },
             });
@@ -133,139 +117,289 @@ describe('Utilities', () => {
 
     });
 
-    describe('.readAcceptableFramesFromBuffer(buffer)', () => {
+    describe('.findAcceptableFrameRangesInBuffer(buffer)', () => {
 
         it('[]', () => {
-            const acceptableFrames = Utilities.readAcceptableFramesFromBuffer(Buffer.from('', 'hex'));
-            expect(acceptableFrames).toEqual([]);
+            const acceptableFrameRanges = Utilities.findAcceptableFrameRangesInBuffer(Buffer.from('', 'hex'));
+            expect(acceptableFrameRanges).toEqual([]);
         });
 
         it('[H]', () => {
-            const acceptableFrames = Utilities.readAcceptableFramesFromBuffer(Buffer.from('5242', 'hex'));
-            expect(acceptableFrames).toEqual([]);
+            const acceptableFrameRanges = Utilities.findAcceptableFrameRangesInBuffer(Buffer.from('5242', 'hex'));
+            expect(acceptableFrameRanges).toEqual([]);
         });
 
         it('[H, L]', () => {
-            const acceptableFrames = Utilities.readAcceptableFramesFromBuffer(Buffer.from('52420a00', 'hex'));
-            expect(acceptableFrames).toEqual([]);
+            const acceptableFrameRanges = Utilities.findAcceptableFrameRangesInBuffer(Buffer.from('52420a00', 'hex'));
+            expect(acceptableFrameRanges).toEqual([]);
         });
 
         it('[H, L, P]', () => {
-            const acceptableFrames = Utilities.readAcceptableFramesFromBuffer(Buffer.from('52420a000111510100ffffff', 'hex'));
-            expect(acceptableFrames).toEqual([]);
+            const acceptableFrameRanges = Utilities.findAcceptableFrameRangesInBuffer(Buffer.from('52420a000111510100ffffff', 'hex'));
+            expect(acceptableFrameRanges).toEqual([]);
         });
 
         it('[H, L, P, C]', () => {
-            const acceptableFrames = Utilities.readAcceptableFramesFromBuffer(Buffer.from('52420a000111510100ffffffe250', 'hex'));
-            expect(acceptableFrames).toEqual([
+            const acceptableFrameRanges = Utilities.findAcceptableFrameRangesInBuffer(Buffer.from('52420a000111510100ffffffe250', 'hex'));
+            expect(acceptableFrameRanges).toEqual([
                 {
-                    frameOffset: 0,
-                    frameLength: 14,
-                    frameBuffer: Buffer.from('52420a000111510100ffffffe250', 'hex'),
+                    start: 0,
+                    end: 14,
+                    length: 14,
                 },
             ]);
         });
 
         it('[H, 0x0000, P, C]', () => {
-            const acceptableFrames = Utilities.readAcceptableFramesFromBuffer(Buffer.from('524200000111510100ffffffe250', 'hex'));
-            expect(acceptableFrames).toEqual([]);
+            const acceptableFrameRanges = Utilities.findAcceptableFrameRangesInBuffer(Buffer.from('524200000111510100ffffffe250', 'hex'));
+            expect(acceptableFrameRanges).toEqual([]);
         });
 
         it('[H, L, P, 0x0000]', () => {
-            const acceptableFrames = Utilities.readAcceptableFramesFromBuffer(Buffer.from('52420a000111510100ffffff0000', 'hex'));
-            expect(acceptableFrames).toEqual([]);
+            const acceptableFrameRanges = Utilities.findAcceptableFrameRangesInBuffer(Buffer.from('52420a000111510100ffffff0000', 'hex'));
+            expect(acceptableFrameRanges).toEqual([]);
         });
 
         it('[..., H, L, P, C, ...]', () => {
-            const acceptableFrames = Utilities.readAcceptableFramesFromBuffer(Buffer.from('1234567852420a000111510100ffffffe25012345678', 'hex'));
-            expect(acceptableFrames).toEqual([
+            const acceptableFrameRanges = Utilities.findAcceptableFrameRangesInBuffer(Buffer.from('1234567852420a000111510100ffffffe25012345678', 'hex'));
+            expect(acceptableFrameRanges).toEqual([
                 {
-                    frameOffset: 4,
-                    frameLength: 14,
-                    frameBuffer: Buffer.from('52420a000111510100ffffffe250', 'hex'),
+                    start: 4,
+                    end: 18,
+                    length: 14,
                 },
             ]);
         });
 
         it('[H, H, L, P, C]', () => {
-            const acceptableFrames = Utilities.readAcceptableFramesFromBuffer(Buffer.from('524252420a000111510100ffffffe250', 'hex'));
-            expect(acceptableFrames).toEqual([
+            const acceptableFrameRanges = Utilities.findAcceptableFrameRangesInBuffer(Buffer.from('524252420a000111510100ffffffe250', 'hex'));
+            expect(acceptableFrameRanges).toEqual([
                 {
-                    frameOffset: 2,
-                    frameLength: 14,
-                    frameBuffer: Buffer.from('52420a000111510100ffffffe250', 'hex'),
+                    start: 2,
+                    end: 16,
+                    length: 14,
                 },
             ]);
         });
 
         it('[H, L, H, L, P, C]', () => {
-            const acceptableFrames = Utilities.readAcceptableFramesFromBuffer(Buffer.from('52420a0052420a000111510100ffffffe250', 'hex'));
-            expect(acceptableFrames).toEqual([
+            const acceptableFrameRanges = Utilities.findAcceptableFrameRangesInBuffer(Buffer.from('52420a0052420a000111510100ffffffe250', 'hex'));
+            expect(acceptableFrameRanges).toEqual([
                 {
-                    frameOffset: 4,
-                    frameLength: 14,
-                    frameBuffer: Buffer.from('52420a000111510100ffffffe250', 'hex'),
+                    start: 4,
+                    end: 18,
+                    length: 14,
                 },
             ]);
         });
 
         it('[H, L, P, H, L, P, C]', () => {
-            const acceptableFrames = Utilities.readAcceptableFramesFromBuffer(Buffer.from('52420a000111510100ffffff52420a000111510100ffffffe250', 'hex'));
-            expect(acceptableFrames).toEqual([
+            const acceptableFrameRanges = Utilities.findAcceptableFrameRangesInBuffer(Buffer.from('52420a000111510100ffffff52420a000111510100ffffffe250', 'hex'));
+            expect(acceptableFrameRanges).toEqual([
                 {
-                    frameOffset: 12,
-                    frameLength: 14,
-                    frameBuffer: Buffer.from('52420a000111510100ffffffe250', 'hex'),
+                    start: 12,
+                    end: 26,
+                    length: 14,
                 },
             ]);
         });
 
         it('[H, L, P, C, H, L, P, C]', () => {
-            const acceptableFrames = Utilities.readAcceptableFramesFromBuffer(Buffer.from('52420a000111510100ffffffe25052420a000111510100ffffffe250', 'hex'));
-            expect(acceptableFrames).toEqual([
+            const acceptableFrameRanges = Utilities.findAcceptableFrameRangesInBuffer(Buffer.from('52420a000111510100ffffffe25052420a000111510100ffffffe250', 'hex'));
+            expect(acceptableFrameRanges).toEqual([
                 {
-                    frameOffset: 0,
-                    frameLength: 14,
-                    frameBuffer: Buffer.from('52420a000111510100ffffffe250', 'hex'),
+                    start: 0,
+                    end: 14,
+                    length: 14,
                 },
                 {
-                    frameOffset: 14,
-                    frameLength: 14,
-                    frameBuffer: Buffer.from('52420a000111510100ffffffe250', 'hex'),
+                    start: 14,
+                    end: 28,
+                    length: 14,
                 },
             ]);
         });
 
         it('[H, L, P, C, ..., H, L, P, C]', () => {
-            const acceptableFrames = Utilities.readAcceptableFramesFromBuffer(Buffer.from('52420a000111510100ffffffe2501234567852420a000111510100ffffffe250', 'hex'));
-            expect(acceptableFrames).toEqual([
+            const acceptableFrameRanges = Utilities.findAcceptableFrameRangesInBuffer(Buffer.from('52420a000111510100ffffffe2501234567852420a000111510100ffffffe250', 'hex'));
+            expect(acceptableFrameRanges).toEqual([
                 {
-                    frameOffset: 0,
-                    frameLength: 14,
-                    frameBuffer: Buffer.from('52420a000111510100ffffffe250', 'hex'),
+                    start: 0,
+                    end: 14,
+                    length: 14,
                 },
                 {
-                    frameOffset: 18,
-                    frameLength: 14,
-                    frameBuffer: Buffer.from('52420a000111510100ffffffe250', 'hex'),
+                    start: 18,
+                    end: 32,
+                    length: 14,
                 },
             ]);
         });
 
         it('[..., H, L, P, C, ..., H, L, P, C, ...]', () => {
-            const acceptableFrames = Utilities.readAcceptableFramesFromBuffer(Buffer.from('12345652420a000111510100ffffffe2501234567852420a000111510100ffffffe250123456', 'hex'));
-            expect(acceptableFrames).toEqual([
+            const acceptableFrameRanges = Utilities.findAcceptableFrameRangesInBuffer(Buffer.from('12345652420a000111510100ffffffe2501234567852420a000111510100ffffffe250123456', 'hex'));
+            expect(acceptableFrameRanges).toEqual([
                 {
-                    frameOffset: 3,
-                    frameLength: 14,
-                    frameBuffer: Buffer.from('52420a000111510100ffffffe250', 'hex'),
+                    start: 3,
+                    end: 17,
+                    length: 14,
                 },
                 {
-                    frameOffset: 21,
-                    frameLength: 14,
-                    frameBuffer: Buffer.from('52420a000111510100ffffffe250', 'hex'),
+                    start: 21,
+                    end: 35,
+                    length: 14,
                 },
             ]);
+        });
+
+    });
+
+    describe('.checkAllResponsePayloadsReceived(commandPayload, responsePayloads)', () => {
+
+        it('<read ledSettingNormalState test>', () => {
+            const received = Utilities.checkAllResponsePayloadsReceived({
+                command: 'read',
+                address: 'ledSettingNormalState',
+                data: {},
+            }, [
+                {
+                    command: 'read',
+                    address: 'ledSettingNormalState',
+                    data: {
+                        displayRuleNormalState: 1,
+                        intensityOfLedRed: 255,
+                        intensityOfLedGreen: 255,
+                        intensityOfLedBlue: 255,
+                    },
+                },
+            ]);
+            expect(received).toBe(true);
+        });
+
+        it('<read memoryDataLong test>', () => {
+            const received = Utilities.checkAllResponsePayloadsReceived({
+                command: 'read',
+                address: 'memoryDataLong',
+                data: {
+                    memoryIndexStart: 1,
+                    memoryIndexEnd: 2,
+                },
+            }, [
+                {
+                    command: 'read',
+                    address: 'memoryDataLong',
+                    data: {
+                        memoryIndex: 1,
+                        timeCounter: 0,
+                        temperature: 0,
+                        relativeHumidity: 0,
+                        ambientLight: 0,
+                        barometricPressure: 0,
+                        soundNoise: 0,
+                        etvoc: 0,
+                        eco2: 0,
+                        discomfortIndex: 0,
+                        heatStroke: 0,
+                        vibrationInformation: 0,
+                        siValue: 0,
+                        pga: 0,
+                        seismicIntensity: 0,
+                        temperatureFlag: 0,
+                        relativeHumidityFlag: 0,
+                        ambientLightFlag: 0,
+                        barometricPressureFlag: 0,
+                        soundNoiseFlag: 0,
+                        etvocFlag: 0,
+                        eco2Flag: 0,
+                        discomfortIndexFlag: 0,
+                        heatStrokeFlag: 0,
+                        siValueFlag: 0,
+                        pgaFlag: 0,
+                        seismicIntensityFlag: 0,
+                    },
+                },
+                {
+                    command: 'read',
+                    address: 'memoryDataLong',
+                    data: {
+                        memoryIndex: 2,
+                        timeCounter: 0,
+                        temperature: 0,
+                        relativeHumidity: 0,
+                        ambientLight: 0,
+                        barometricPressure: 0,
+                        soundNoise: 0,
+                        etvoc: 0,
+                        eco2: 0,
+                        discomfortIndex: 0,
+                        heatStroke: 0,
+                        vibrationInformation: 0,
+                        siValue: 0,
+                        pga: 0,
+                        seismicIntensity: 0,
+                        temperatureFlag: 0,
+                        relativeHumidityFlag: 0,
+                        ambientLightFlag: 0,
+                        barometricPressureFlag: 0,
+                        soundNoiseFlag: 0,
+                        etvocFlag: 0,
+                        eco2Flag: 0,
+                        discomfortIndexFlag: 0,
+                        heatStrokeFlag: 0,
+                        siValueFlag: 0,
+                        pgaFlag: 0,
+                        seismicIntensityFlag: 0,
+                    },
+                },
+            ]);
+            expect(received).toBe(true);
+        });
+
+        it('<read memoryDataShort test>', () => {
+            const received = Utilities.checkAllResponsePayloadsReceived({
+                command: 'read',
+                address: 'memoryDataShort',
+                data: {
+                    memoryIndexStart: 1,
+                    memoryIndexEnd: 2,
+                },
+            }, [
+                {
+                    command: 'read',
+                    address: 'memoryDataShort',
+                    data: {
+                        memoryIndex: 1,
+                        timeCounter: 0,
+                        temperature: 0,
+                        relativeHumidity: 0,
+                        ambientLight: 0,
+                        barometricPressure: 0,
+                        soundNoise: 0,
+                        etvoc: 0,
+                        eco2: 0,
+                        discomfortIndex: 0,
+                        heatStroke: 0,
+                    },
+                },
+                {
+                    command: 'read',
+                    address: 'memoryDataShort',
+                    data: {
+                        memoryIndex: 2,
+                        timeCounter: 0,
+                        temperature: 0,
+                        relativeHumidity: 0,
+                        ambientLight: 0,
+                        barometricPressure: 0,
+                        soundNoise: 0,
+                        etvoc: 0,
+                        eco2: 0,
+                        discomfortIndex: 0,
+                        heatStroke: 0,
+                    },
+                },
+            ]);
+            expect(received).toBe(true);
         });
 
     });

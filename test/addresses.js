@@ -10,7 +10,7 @@ describe('Addresses', () => {
 
     describe('.privateScope()', () => {
 
-        it('<empty>', () => {
+        it('<type test>', () => {
             const privateScope = Addresses.privateScope();
             expect(privateScope).toBeInstanceOf(Object);
         });
@@ -404,8 +404,8 @@ describe('Addresses', () => {
         const checkDataType = (dataType) => {
             const length = dataType.length;
             let lengthCheck = 0;
-            for (const field of dataType.fields) {
-                const fieldLength = field.end - field.begin + 1;
+            for (const fieldType of dataType.fieldTypes) {
+                const fieldLength = fieldType.end - fieldType.begin + 1;
                 lengthCheck += fieldLength;
             }
             const lengthMatch = lengthCheck === length;
@@ -425,12 +425,12 @@ describe('Addresses', () => {
             });
             it('.readCommandDataType', () => {
                 expect(addressType.readCommandDataType.length).toBe(8);
-                expect(addressType.readCommandDataType.fields.length).toBe(2);
+                expect(addressType.readCommandDataType.fieldTypes.length).toBe(2);
                 expect(checkDataType(addressType.readCommandDataType)).toBe(true);
             });
             it('.readResponseDataType', () => {
                 expect(addressType.readResponseDataType.length).toBe(60);
-                expect(addressType.readResponseDataType.fields.length).toBe(27);
+                expect(addressType.readResponseDataType.fieldTypes.length).toBe(27);
                 expect(checkDataType(addressType.readResponseDataType)).toBe(true);
             });
             it('.writeCommandDataType', () => {
@@ -454,12 +454,12 @@ describe('Addresses', () => {
             });
             it('.readCommandDataType', () => {
                 expect(addressType.readCommandDataType.length).toBe(8);
-                expect(addressType.readCommandDataType.fields.length).toBe(2);
+                expect(addressType.readCommandDataType.fieldTypes.length).toBe(2);
                 expect(checkDataType(addressType.readCommandDataType)).toBe(true);
             });
             it('.readResponseDataType', () => {
                 expect(addressType.readResponseDataType.length).toBe(32);
-                expect(addressType.readResponseDataType.fields.length).toBe(11);
+                expect(addressType.readResponseDataType.fieldTypes.length).toBe(11);
                 expect(checkDataType(addressType.readResponseDataType)).toBe(true);
             });
             it('.writeCommandDataType', () => {
@@ -483,12 +483,12 @@ describe('Addresses', () => {
             });
             it('.readCommandDataType', () => {
                 expect(addressType.readCommandDataType.length).toBe(0);
-                expect(addressType.readCommandDataType.fields.length).toBe(0);
+                expect(addressType.readCommandDataType.fieldTypes.length).toBe(0);
                 expect(checkDataType(addressType.readCommandDataType)).toBe(true);
             });
             it('.readResponseDataType', () => {
                 expect(addressType.readResponseDataType.length).toBe(49);
-                expect(addressType.readResponseDataType.fields.length).toBe(26);
+                expect(addressType.readResponseDataType.fieldTypes.length).toBe(26);
                 expect(checkDataType(addressType.readResponseDataType)).toBe(true);
             });
             it('.writeCommandDataType', () => {
@@ -512,12 +512,12 @@ describe('Addresses', () => {
             });
             it('.readCommandDataType', () => {
                 expect(addressType.readCommandDataType.length).toBe(0);
-                expect(addressType.readCommandDataType.fields.length).toBe(0);
+                expect(addressType.readCommandDataType.fieldTypes.length).toBe(0);
                 expect(checkDataType(addressType.readCommandDataType)).toBe(true);
             });
             it('.readResponseDataType', () => {
                 expect(addressType.readResponseDataType.length).toBe(21);
-                expect(addressType.readResponseDataType.fields.length).toBe(10);
+                expect(addressType.readResponseDataType.fieldTypes.length).toBe(10);
                 expect(checkDataType(addressType.readResponseDataType)).toBe(true);
             });
             it('.writeCommandDataType', () => {
@@ -541,12 +541,12 @@ describe('Addresses', () => {
             });
             it('.readCommandDataType', () => {
                 expect(addressType.readCommandDataType.length).toBe(2);
-                expect(addressType.readCommandDataType.fields.length).toBe(2);
+                expect(addressType.readCommandDataType.fieldTypes.length).toBe(2);
                 expect(checkDataType(addressType.readCommandDataType)).toBe(true);
             });
             it('.readResponseDataType', () => {
                 expect(addressType.readResponseDataType.length).toBe(60);
-                expect(addressType.readResponseDataType.fields.length).toBe(27);
+                expect(addressType.readResponseDataType.fieldTypes.length).toBe(27);
                 expect(checkDataType(addressType.readResponseDataType)).toBe(true);
             });
             it('.writeCommandDataType', () => {
@@ -570,12 +570,12 @@ describe('Addresses', () => {
             });
             it('.readCommandDataType', () => {
                 expect(addressType.readCommandDataType.length).toBe(6);
-                expect(addressType.readCommandDataType.fields.length).toBe(4);
+                expect(addressType.readCommandDataType.fieldTypes.length).toBe(4);
                 expect(checkDataType(addressType.readCommandDataType)).toBe(true);
             });
             it('.readResponseDataType', () => {
                 expect(addressType.readResponseDataType.length).toBe(228);
-                expect(addressType.readResponseDataType.fields.length).toBe(114);
+                expect(addressType.readResponseDataType.fieldTypes.length).toBe(114);
                 expect(checkDataType(addressType.readResponseDataType)).toBe(true);
             });
             it('.writeCommandDataType', () => {
@@ -599,12 +599,12 @@ describe('Addresses', () => {
             });
             it('.readCommandDataType', () => {
                 expect(addressType.readCommandDataType.length).toBe(0);
-                expect(addressType.readCommandDataType.fields.length).toBe(0);
+                expect(addressType.readCommandDataType.fieldTypes.length).toBe(0);
                 expect(checkDataType(addressType.readCommandDataType)).toBe(true);
             });
             it('.readResponseDataType', () => {
                 expect(addressType.readResponseDataType.length).toBe(8);
-                expect(addressType.readResponseDataType.fields.length).toBe(2);
+                expect(addressType.readResponseDataType.fieldTypes.length).toBe(2);
                 expect(checkDataType(addressType.readResponseDataType)).toBe(true);
             });
             it('.writeCommandDataType', () => {
@@ -628,12 +628,12 @@ describe('Addresses', () => {
             });
             it('.readCommandDataType', () => {
                 expect(addressType.readCommandDataType.length).toBe(0);
-                expect(addressType.readCommandDataType.fields.length).toBe(0);
+                expect(addressType.readCommandDataType.fieldTypes.length).toBe(0);
                 expect(checkDataType(addressType.readCommandDataType)).toBe(true);
             });
             it('.readResponseDataType', () => {
                 expect(addressType.readResponseDataType.length).toBe(17);
-                expect(addressType.readResponseDataType.fields.length).toBe(8);
+                expect(addressType.readResponseDataType.fieldTypes.length).toBe(8);
                 expect(checkDataType(addressType.readResponseDataType)).toBe(true);
             });
             it('.writeCommandDataType', () => {
@@ -657,12 +657,12 @@ describe('Addresses', () => {
             });
             it('.readCommandDataType', () => {
                 expect(addressType.readCommandDataType.length).toBe(0);
-                expect(addressType.readCommandDataType.fields.length).toBe(0);
+                expect(addressType.readCommandDataType.fieldTypes.length).toBe(0);
                 expect(checkDataType(addressType.readCommandDataType)).toBe(true);
             });
             it('.readResponseDataType', () => {
                 expect(addressType.readResponseDataType.length).toBe(18);
-                expect(addressType.readResponseDataType.fields.length).toBe(10);
+                expect(addressType.readResponseDataType.fieldTypes.length).toBe(10);
                 expect(checkDataType(addressType.readResponseDataType)).toBe(true);
             });
             it('.writeCommandDataType', () => {
@@ -686,12 +686,12 @@ describe('Addresses', () => {
             });
             it('.readCommandDataType', () => {
                 expect(addressType.readCommandDataType.length).toBe(0);
-                expect(addressType.readCommandDataType.fields.length).toBe(0);
+                expect(addressType.readCommandDataType.fieldTypes.length).toBe(0);
                 expect(checkDataType(addressType.readCommandDataType)).toBe(true);
             });
             it('.readResponseDataType', () => {
                 expect(addressType.readResponseDataType.length).toBe(17);
-                expect(addressType.readResponseDataType.fields.length).toBe(8);
+                expect(addressType.readResponseDataType.fieldTypes.length).toBe(8);
                 expect(checkDataType(addressType.readResponseDataType)).toBe(true);
             });
             it('.writeCommandDataType', () => {
@@ -715,12 +715,12 @@ describe('Addresses', () => {
             });
             it('.readCommandDataType', () => {
                 expect(addressType.readCommandDataType.length).toBe(0);
-                expect(addressType.readCommandDataType.fields.length).toBe(0);
+                expect(addressType.readCommandDataType.fieldTypes.length).toBe(0);
                 expect(checkDataType(addressType.readCommandDataType)).toBe(true);
             });
             it('.readResponseDataType', () => {
                 expect(addressType.readResponseDataType.length).toBe(8);
-                expect(addressType.readResponseDataType.fields.length).toBe(6);
+                expect(addressType.readResponseDataType.fieldTypes.length).toBe(6);
                 expect(checkDataType(addressType.readResponseDataType)).toBe(true);
             });
             it('.writeCommandDataType', () => {
@@ -744,12 +744,12 @@ describe('Addresses', () => {
             });
             it('.readCommandDataType', () => {
                 expect(addressType.readCommandDataType.length).toBe(0);
-                expect(addressType.readCommandDataType.fields.length).toBe(0);
+                expect(addressType.readCommandDataType.fieldTypes.length).toBe(0);
                 expect(checkDataType(addressType.readCommandDataType)).toBe(true);
             });
             it('.readResponseDataType', () => {
                 expect(addressType.readResponseDataType.length).toBe(15);
-                expect(addressType.readResponseDataType.fields.length).toBe(9);
+                expect(addressType.readResponseDataType.fieldTypes.length).toBe(9);
                 expect(checkDataType(addressType.readResponseDataType)).toBe(true);
             });
             it('.writeCommandDataType', () => {
@@ -773,12 +773,12 @@ describe('Addresses', () => {
             });
             it('.readCommandDataType', () => {
                 expect(addressType.readCommandDataType.length).toBe(0);
-                expect(addressType.readCommandDataType.fields.length).toBe(0);
+                expect(addressType.readCommandDataType.fieldTypes.length).toBe(0);
                 expect(checkDataType(addressType.readCommandDataType)).toBe(true);
             });
             it('.readResponseDataType', () => {
                 expect(addressType.readResponseDataType.length).toBe(8);
-                expect(addressType.readResponseDataType.fields.length).toBe(2);
+                expect(addressType.readResponseDataType.fieldTypes.length).toBe(2);
                 expect(checkDataType(addressType.readResponseDataType)).toBe(true);
             });
             it('.writeCommandDataType', () => {
@@ -802,22 +802,22 @@ describe('Addresses', () => {
             });
             it('.readCommandDataType', () => {
                 expect(addressType.readCommandDataType.length).toBe(0);
-                expect(addressType.readCommandDataType.fields.length).toBe(0);
+                expect(addressType.readCommandDataType.fieldTypes.length).toBe(0);
                 expect(checkDataType(addressType.readCommandDataType)).toBe(true);
             });
             it('.readResponseDataType', () => {
                 expect(addressType.readResponseDataType.length).toBe(5);
-                expect(addressType.readResponseDataType.fields.length).toBe(4);
+                expect(addressType.readResponseDataType.fieldTypes.length).toBe(4);
                 expect(checkDataType(addressType.readResponseDataType)).toBe(true);
             });
             it('.writeCommandDataType', () => {
                 expect(addressType.writeCommandDataType.length).toBe(5);
-                expect(addressType.writeCommandDataType.fields.length).toBe(4);
+                expect(addressType.writeCommandDataType.fieldTypes.length).toBe(4);
                 expect(checkDataType(addressType.writeCommandDataType)).toBe(true);
             });
             it('.writeResponseDataType', () => {
                 expect(addressType.writeResponseDataType.length).toBe(5);
-                expect(addressType.writeResponseDataType.fields.length).toBe(4);
+                expect(addressType.writeResponseDataType.fieldTypes.length).toBe(4);
                 expect(checkDataType(addressType.writeResponseDataType)).toBe(true);
             });
         });
@@ -835,22 +835,22 @@ describe('Addresses', () => {
             });
             it('.readCommandDataType', () => {
                 expect(addressType.readCommandDataType.length).toBe(0);
-                expect(addressType.readCommandDataType.fields.length).toBe(0);
+                expect(addressType.readCommandDataType.fieldTypes.length).toBe(0);
                 expect(checkDataType(addressType.readCommandDataType)).toBe(true);
             });
             it('.readResponseDataType', () => {
                 expect(addressType.readResponseDataType.length).toBe(5);
-                expect(addressType.readResponseDataType.fields.length).toBe(4);
+                expect(addressType.readResponseDataType.fieldTypes.length).toBe(4);
                 expect(checkDataType(addressType.readResponseDataType)).toBe(true);
             });
             it('.writeCommandDataType', () => {
                 expect(addressType.writeCommandDataType.length).toBe(5);
-                expect(addressType.writeCommandDataType.fields.length).toBe(4);
+                expect(addressType.writeCommandDataType.fieldTypes.length).toBe(4);
                 expect(checkDataType(addressType.writeCommandDataType)).toBe(true);
             });
             it('.writeResponseDataType', () => {
                 expect(addressType.writeResponseDataType.length).toBe(5);
-                expect(addressType.writeResponseDataType.fields.length).toBe(4);
+                expect(addressType.writeResponseDataType.fieldTypes.length).toBe(4);
                 expect(checkDataType(addressType.writeResponseDataType)).toBe(true);
             });
         });
@@ -868,22 +868,22 @@ describe('Addresses', () => {
             });
             it('.readCommandDataType', () => {
                 expect(addressType.readCommandDataType.length).toBe(0);
-                expect(addressType.readCommandDataType.fields.length).toBe(0);
+                expect(addressType.readCommandDataType.fieldTypes.length).toBe(0);
                 expect(checkDataType(addressType.readCommandDataType)).toBe(true);
             });
             it('.readResponseDataType', () => {
                 expect(addressType.readResponseDataType.length).toBe(3);
-                expect(addressType.readResponseDataType.fields.length).toBe(3);
+                expect(addressType.readResponseDataType.fieldTypes.length).toBe(3);
                 expect(checkDataType(addressType.readResponseDataType)).toBe(true);
             });
             it('.writeCommandDataType', () => {
                 expect(addressType.writeCommandDataType.length).toBe(3);
-                expect(addressType.writeCommandDataType.fields.length).toBe(3);
+                expect(addressType.writeCommandDataType.fieldTypes.length).toBe(3);
                 expect(checkDataType(addressType.writeCommandDataType)).toBe(true);
             });
             it('.writeResponseDataType', () => {
                 expect(addressType.writeResponseDataType.length).toBe(3);
-                expect(addressType.writeResponseDataType.fields.length).toBe(3);
+                expect(addressType.writeResponseDataType.fieldTypes.length).toBe(3);
                 expect(checkDataType(addressType.writeResponseDataType)).toBe(true);
             });
         });
@@ -901,22 +901,22 @@ describe('Addresses', () => {
             });
             it('.readCommandDataType', () => {
                 expect(addressType.readCommandDataType.length).toBe(0);
-                expect(addressType.readCommandDataType.fields.length).toBe(0);
+                expect(addressType.readCommandDataType.fieldTypes.length).toBe(0);
                 expect(checkDataType(addressType.readCommandDataType)).toBe(true);
             });
             it('.readResponseDataType', () => {
                 expect(addressType.readResponseDataType.length).toBe(13);
-                expect(addressType.readResponseDataType.fields.length).toBe(6);
+                expect(addressType.readResponseDataType.fieldTypes.length).toBe(6);
                 expect(checkDataType(addressType.readResponseDataType)).toBe(true);
             });
             it('.writeCommandDataType', () => {
                 expect(addressType.writeCommandDataType.length).toBe(13);
-                expect(addressType.writeCommandDataType.fields.length).toBe(6);
+                expect(addressType.writeCommandDataType.fieldTypes.length).toBe(6);
                 expect(checkDataType(addressType.writeCommandDataType)).toBe(true);
             });
             it('.writeResponseDataType', () => {
                 expect(addressType.writeResponseDataType.length).toBe(13);
-                expect(addressType.writeResponseDataType.fields.length).toBe(6);
+                expect(addressType.writeResponseDataType.fieldTypes.length).toBe(6);
                 expect(checkDataType(addressType.writeResponseDataType)).toBe(true);
             });
         });
@@ -934,22 +934,22 @@ describe('Addresses', () => {
             });
             it('.readCommandDataType', () => {
                 expect(addressType.readCommandDataType.length).toBe(0);
-                expect(addressType.readCommandDataType.fields.length).toBe(0);
+                expect(addressType.readCommandDataType.fieldTypes.length).toBe(0);
                 expect(checkDataType(addressType.readCommandDataType)).toBe(true);
             });
             it('.readResponseDataType', () => {
                 expect(addressType.readResponseDataType.length).toBe(3);
-                expect(addressType.readResponseDataType.fields.length).toBe(2);
+                expect(addressType.readResponseDataType.fieldTypes.length).toBe(2);
                 expect(checkDataType(addressType.readResponseDataType)).toBe(true);
             });
             it('.writeCommandDataType', () => {
                 expect(addressType.writeCommandDataType.length).toBe(3);
-                expect(addressType.writeCommandDataType.fields.length).toBe(2);
+                expect(addressType.writeCommandDataType.fieldTypes.length).toBe(2);
                 expect(checkDataType(addressType.writeCommandDataType)).toBe(true);
             });
             it('.writeResponseDataType', () => {
                 expect(addressType.writeResponseDataType.length).toBe(3);
-                expect(addressType.writeResponseDataType.fields.length).toBe(2);
+                expect(addressType.writeResponseDataType.fieldTypes.length).toBe(2);
                 expect(checkDataType(addressType.writeResponseDataType)).toBe(true);
             });
         });
@@ -973,12 +973,12 @@ describe('Addresses', () => {
             });
             it('.writeCommandDataType', () => {
                 expect(addressType.writeCommandDataType.length).toBe(1);
-                expect(addressType.writeCommandDataType.fields.length).toBe(1);
+                expect(addressType.writeCommandDataType.fieldTypes.length).toBe(1);
                 expect(checkDataType(addressType.writeCommandDataType)).toBe(true);
             });
             it('.writeResponseDataType', () => {
                 expect(addressType.writeResponseDataType.length).toBe(1);
-                expect(addressType.writeResponseDataType.fields.length).toBe(1);
+                expect(addressType.writeResponseDataType.fieldTypes.length).toBe(1);
                 expect(checkDataType(addressType.writeResponseDataType)).toBe(true);
             });
         });
@@ -996,22 +996,22 @@ describe('Addresses', () => {
             });
             it('.readCommandDataType', () => {
                 expect(addressType.readCommandDataType.length).toBe(0);
-                expect(addressType.readCommandDataType.fields.length).toBe(0);
+                expect(addressType.readCommandDataType.fieldTypes.length).toBe(0);
                 expect(checkDataType(addressType.readCommandDataType)).toBe(true);
             });
             it('.readResponseDataType', () => {
                 expect(addressType.readResponseDataType.length).toBe(1);
-                expect(addressType.readResponseDataType.fields.length).toBe(1);
+                expect(addressType.readResponseDataType.fieldTypes.length).toBe(1);
                 expect(checkDataType(addressType.readResponseDataType)).toBe(true);
             });
             it('.writeCommandDataType', () => {
                 expect(addressType.writeCommandDataType.length).toBe(1);
-                expect(addressType.writeCommandDataType.fields.length).toBe(1);
+                expect(addressType.writeCommandDataType.fieldTypes.length).toBe(1);
                 expect(checkDataType(addressType.writeCommandDataType)).toBe(true);
             });
             it('.writeResponseDataType', () => {
                 expect(addressType.writeResponseDataType.length).toBe(1);
-                expect(addressType.writeResponseDataType.fields.length).toBe(1);
+                expect(addressType.writeResponseDataType.fieldTypes.length).toBe(1);
                 expect(checkDataType(addressType.writeResponseDataType)).toBe(true);
             });
         });
@@ -1035,12 +1035,12 @@ describe('Addresses', () => {
             });
             it('.writeCommandDataType', () => {
                 expect(addressType.writeCommandDataType.length).toBe(7);
-                expect(addressType.writeCommandDataType.fields.length).toBe(5);
+                expect(addressType.writeCommandDataType.fieldTypes.length).toBe(5);
                 expect(checkDataType(addressType.writeCommandDataType)).toBe(true);
             });
             it('.writeResponseDataType', () => {
                 expect(addressType.writeResponseDataType.length).toBe(7);
-                expect(addressType.writeResponseDataType.fields.length).toBe(5);
+                expect(addressType.writeResponseDataType.fieldTypes.length).toBe(5);
                 expect(checkDataType(addressType.writeResponseDataType)).toBe(true);
             });
         });
@@ -1058,22 +1058,22 @@ describe('Addresses', () => {
             });
             it('.readCommandDataType', () => {
                 expect(addressType.readCommandDataType.length).toBe(0);
-                expect(addressType.readCommandDataType.fields.length).toBe(0);
+                expect(addressType.readCommandDataType.fieldTypes.length).toBe(0);
                 expect(checkDataType(addressType.readCommandDataType)).toBe(true);
             });
             it('.readResponseDataType', () => {
                 expect(addressType.readResponseDataType.length).toBe(3);
-                expect(addressType.readResponseDataType.fields.length).toBe(2);
+                expect(addressType.readResponseDataType.fieldTypes.length).toBe(2);
                 expect(checkDataType(addressType.readResponseDataType)).toBe(true);
             });
             it('.writeCommandDataType', () => {
                 expect(addressType.writeCommandDataType.length).toBe(3);
-                expect(addressType.writeCommandDataType.fields.length).toBe(2);
+                expect(addressType.writeCommandDataType.fieldTypes.length).toBe(2);
                 expect(checkDataType(addressType.writeCommandDataType)).toBe(true);
             });
             it('.writeResponseDataType', () => {
                 expect(addressType.writeResponseDataType.length).toBe(3);
-                expect(addressType.writeResponseDataType.fields.length).toBe(2);
+                expect(addressType.writeResponseDataType.fieldTypes.length).toBe(2);
                 expect(checkDataType(addressType.writeResponseDataType)).toBe(true);
             });
         });
@@ -1091,12 +1091,12 @@ describe('Addresses', () => {
             });
             it('.readCommandDataType', () => {
                 expect(addressType.readCommandDataType.length).toBe(0);
-                expect(addressType.readCommandDataType.fields.length).toBe(0);
+                expect(addressType.readCommandDataType.fieldTypes.length).toBe(0);
                 expect(checkDataType(addressType.readCommandDataType)).toBe(true);
             });
             it('.readResponseDataType', () => {
                 expect(addressType.readResponseDataType.length).toBe(8);
-                expect(addressType.readResponseDataType.fields.length).toBe(1);
+                expect(addressType.readResponseDataType.fieldTypes.length).toBe(1);
                 expect(checkDataType(addressType.readResponseDataType)).toBe(true);
             });
             it('.writeCommandDataType', () => {
@@ -1120,22 +1120,22 @@ describe('Addresses', () => {
             });
             it('.readCommandDataType', () => {
                 expect(addressType.readCommandDataType.length).toBe(0);
-                expect(addressType.readCommandDataType.fields.length).toBe(0);
+                expect(addressType.readCommandDataType.fieldTypes.length).toBe(0);
                 expect(checkDataType(addressType.readCommandDataType)).toBe(true);
             });
             it('.readResponseDataType', () => {
                 expect(addressType.readResponseDataType.length).toBe(8);
-                expect(addressType.readResponseDataType.fields.length).toBe(1);
+                expect(addressType.readResponseDataType.fieldTypes.length).toBe(1);
                 expect(checkDataType(addressType.readResponseDataType)).toBe(true);
             });
             it('.writeCommandDataType', () => {
                 expect(addressType.writeCommandDataType.length).toBe(8);
-                expect(addressType.writeCommandDataType.fields.length).toBe(1);
+                expect(addressType.writeCommandDataType.fieldTypes.length).toBe(1);
                 expect(checkDataType(addressType.writeCommandDataType)).toBe(true);
             });
             it('.writeResponseDataType', () => {
                 expect(addressType.writeResponseDataType.length).toBe(8);
-                expect(addressType.writeResponseDataType.fields.length).toBe(1);
+                expect(addressType.writeResponseDataType.fieldTypes.length).toBe(1);
                 expect(checkDataType(addressType.writeResponseDataType)).toBe(true);
             });
         });
@@ -1153,22 +1153,22 @@ describe('Addresses', () => {
             });
             it('.readCommandDataType', () => {
                 expect(addressType.readCommandDataType.length).toBe(0);
-                expect(addressType.readCommandDataType.fields.length).toBe(0);
+                expect(addressType.readCommandDataType.fieldTypes.length).toBe(0);
                 expect(checkDataType(addressType.readCommandDataType)).toBe(true);
             });
             it('.readResponseDataType', () => {
                 expect(addressType.readResponseDataType.length).toBe(2);
-                expect(addressType.readResponseDataType.fields.length).toBe(1);
+                expect(addressType.readResponseDataType.fieldTypes.length).toBe(1);
                 expect(checkDataType(addressType.readResponseDataType)).toBe(true);
             });
             it('.writeCommandDataType', () => {
                 expect(addressType.writeCommandDataType.length).toBe(2);
-                expect(addressType.writeCommandDataType.fields.length).toBe(1);
+                expect(addressType.writeCommandDataType.fieldTypes.length).toBe(1);
                 expect(checkDataType(addressType.writeCommandDataType)).toBe(true);
             });
             it('.writeResponseDataType', () => {
                 expect(addressType.writeResponseDataType.length).toBe(2);
-                expect(addressType.writeResponseDataType.fields.length).toBe(1);
+                expect(addressType.writeResponseDataType.fieldTypes.length).toBe(1);
                 expect(checkDataType(addressType.writeResponseDataType)).toBe(true);
             });
         });
@@ -1186,22 +1186,22 @@ describe('Addresses', () => {
             });
             it('.readCommandDataType', () => {
                 expect(addressType.readCommandDataType.length).toBe(0);
-                expect(addressType.readCommandDataType.fields.length).toBe(0);
+                expect(addressType.readCommandDataType.fieldTypes.length).toBe(0);
                 expect(checkDataType(addressType.readCommandDataType)).toBe(true);
             });
             it('.readResponseDataType', () => {
                 expect(addressType.readResponseDataType.length).toBe(20);
-                expect(addressType.readResponseDataType.fields.length).toBe(11);
+                expect(addressType.readResponseDataType.fieldTypes.length).toBe(11);
                 expect(checkDataType(addressType.readResponseDataType)).toBe(true);
             });
             it('.writeCommandDataType', () => {
                 expect(addressType.writeCommandDataType.length).toBe(20);
-                expect(addressType.writeCommandDataType.fields.length).toBe(11);
+                expect(addressType.writeCommandDataType.fieldTypes.length).toBe(11);
                 expect(checkDataType(addressType.writeCommandDataType)).toBe(true);
             });
             it('.writeResponseDataType', () => {
                 expect(addressType.writeResponseDataType.length).toBe(20);
-                expect(addressType.writeResponseDataType.fields.length).toBe(11);
+                expect(addressType.writeResponseDataType.fieldTypes.length).toBe(11);
                 expect(checkDataType(addressType.writeResponseDataType)).toBe(true);
             });
         });
@@ -1219,22 +1219,22 @@ describe('Addresses', () => {
             });
             it('.readCommandDataType', () => {
                 expect(addressType.readCommandDataType.length).toBe(0);
-                expect(addressType.readCommandDataType.fields.length).toBe(0);
+                expect(addressType.readCommandDataType.fieldTypes.length).toBe(0);
                 expect(checkDataType(addressType.readCommandDataType)).toBe(true);
             });
             it('.readResponseDataType', () => {
                 expect(addressType.readResponseDataType.length).toBe(20);
-                expect(addressType.readResponseDataType.fields.length).toBe(12);
+                expect(addressType.readResponseDataType.fieldTypes.length).toBe(12);
                 expect(checkDataType(addressType.readResponseDataType)).toBe(true);
             });
             it('.writeCommandDataType', () => {
                 expect(addressType.writeCommandDataType.length).toBe(20);
-                expect(addressType.writeCommandDataType.fields.length).toBe(12);
+                expect(addressType.writeCommandDataType.fieldTypes.length).toBe(12);
                 expect(checkDataType(addressType.writeCommandDataType)).toBe(true);
             });
             it('.writeResponseDataType', () => {
                 expect(addressType.writeResponseDataType.length).toBe(20);
-                expect(addressType.writeResponseDataType.fields.length).toBe(12);
+                expect(addressType.writeResponseDataType.fieldTypes.length).toBe(12);
                 expect(checkDataType(addressType.writeResponseDataType)).toBe(true);
             });
         });
@@ -1252,22 +1252,22 @@ describe('Addresses', () => {
             });
             it('.readCommandDataType', () => {
                 expect(addressType.readCommandDataType.length).toBe(0);
-                expect(addressType.readCommandDataType.fields.length).toBe(0);
+                expect(addressType.readCommandDataType.fieldTypes.length).toBe(0);
                 expect(checkDataType(addressType.readCommandDataType)).toBe(true);
             });
             it('.readResponseDataType', () => {
                 expect(addressType.readResponseDataType.length).toBe(9);
-                expect(addressType.readResponseDataType.fields.length).toBe(5);
+                expect(addressType.readResponseDataType.fieldTypes.length).toBe(5);
                 expect(checkDataType(addressType.readResponseDataType)).toBe(true);
             });
             it('.writeCommandDataType', () => {
                 expect(addressType.writeCommandDataType.length).toBe(9);
-                expect(addressType.writeCommandDataType.fields.length).toBe(5);
+                expect(addressType.writeCommandDataType.fieldTypes.length).toBe(5);
                 expect(checkDataType(addressType.writeCommandDataType)).toBe(true);
             });
             it('.writeResponseDataType', () => {
                 expect(addressType.writeResponseDataType.length).toBe(9);
-                expect(addressType.writeResponseDataType.fields.length).toBe(5);
+                expect(addressType.writeResponseDataType.fieldTypes.length).toBe(5);
                 expect(checkDataType(addressType.writeResponseDataType)).toBe(true);
             });
         });
@@ -1285,12 +1285,12 @@ describe('Addresses', () => {
             });
             it('.readCommandDataType', () => {
                 expect(addressType.readCommandDataType.length).toBe(0);
-                expect(addressType.readCommandDataType.fields.length).toBe(0);
+                expect(addressType.readCommandDataType.fieldTypes.length).toBe(0);
                 expect(checkDataType(addressType.readCommandDataType)).toBe(true);
             });
             it('.readResponseDataType', () => {
                 expect(addressType.readResponseDataType.length).toBe(11);
-                expect(addressType.readResponseDataType.fields.length).toBe(11);
+                expect(addressType.readResponseDataType.fieldTypes.length).toBe(11);
                 expect(checkDataType(addressType.readResponseDataType)).toBe(true);
             });
             it('.writeCommandDataType', () => {
@@ -1314,12 +1314,12 @@ describe('Addresses', () => {
             });
             it('.readCommandDataType', () => {
                 expect(addressType.readCommandDataType.length).toBe(0);
-                expect(addressType.readCommandDataType.fields.length).toBe(0);
+                expect(addressType.readCommandDataType.fieldTypes.length).toBe(0);
                 expect(checkDataType(addressType.readCommandDataType)).toBe(true);
             });
             it('.readResponseDataType', () => {
                 expect(addressType.readResponseDataType.length).toBe(1);
-                expect(addressType.readResponseDataType.fields.length).toBe(1);
+                expect(addressType.readResponseDataType.fieldTypes.length).toBe(1);
                 expect(checkDataType(addressType.readResponseDataType)).toBe(true);
             });
             it('.writeCommandDataType', () => {
@@ -1343,12 +1343,12 @@ describe('Addresses', () => {
             });
             it('.readCommandDataType', () => {
                 expect(addressType.readCommandDataType.length).toBe(0);
-                expect(addressType.readCommandDataType.fields.length).toBe(0);
+                expect(addressType.readCommandDataType.fieldTypes.length).toBe(0);
                 expect(checkDataType(addressType.readCommandDataType)).toBe(true);
             });
             it('.readResponseDataType', () => {
                 expect(addressType.readResponseDataType.length).toBe(35);
-                expect(addressType.readResponseDataType.fields.length).toBe(5);
+                expect(addressType.readResponseDataType.fieldTypes.length).toBe(5);
                 expect(checkDataType(addressType.readResponseDataType)).toBe(true);
             });
             it('.writeCommandDataType', () => {

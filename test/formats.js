@@ -10,7 +10,7 @@ describe('Formats', () => {
 
     describe('.privateScope()', () => {
 
-        it('<empty>', () => {
+        it('<type test>', () => {
             const privateScope = Formats.privateScope();
             expect(privateScope).toBeInstanceOf(Object);
         });
@@ -77,14 +77,13 @@ describe('Formats', () => {
                 expect(formatType.primitive).toBe('number');
             });
             it('.read(buffer, begin, end)', () => {
-                const buffer = Buffer.from([0x01, 0x23]);
+                const buffer = Buffer.from('0123', 'hex');
                 expect(formatType.read(buffer, 0, 1)).toBe(0x2301);
             });
             it('.write(buffer, begin, end, value)', () => {
-                const bufferA = Buffer.from([0x00, 0x00]);
-                const bufferB = Buffer.from([0x01, 0x23]);
-                formatType.write(bufferA, 0, 1, 0x2301);
-                expect(bufferA.compare(bufferB)).toBe(0);
+                const buffer = Buffer.from('0000', 'hex');
+                formatType.write(buffer, 0, 1, 0x2301);
+                expect(buffer).toEqual(Buffer.from('0123', 'hex'));
             });
         });
 
@@ -97,14 +96,13 @@ describe('Formats', () => {
                 expect(formatType.primitive).toBe('number');
             });
             it('.read(buffer, begin, end)', () => {
-                const buffer = Buffer.from([0x01, 0x23, 0x45, 0x67]);
+                const buffer = Buffer.from('01234567', 'hex');
                 expect(formatType.read(buffer, 0, 3)).toBe(0x67452301);
             });
             it('.write(buffer, begin, end, value)', () => {
-                const bufferA = Buffer.from([0x00, 0x00, 0x00, 0x00]);
-                const bufferB = Buffer.from([0x01, 0x23, 0x45, 0x67]);
-                formatType.write(bufferA, 0, 3, 0x67452301);
-                expect(bufferA.compare(bufferB)).toBe(0);
+                const buffer = Buffer.from('00000000', 'hex');
+                formatType.write(buffer, 0, 3, 0x67452301);
+                expect(buffer).toEqual(Buffer.from('01234567', 'hex'));
             });
         });
 
@@ -117,14 +115,13 @@ describe('Formats', () => {
                 expect(formatType.primitive).toBe('number');
             });
             it('.read(buffer, begin, end)', () => {
-                const buffer = Buffer.from([0x01]);
+                const buffer = Buffer.from('01', 'hex');
                 expect(formatType.read(buffer, 0, 0)).toBe(0x01);
             });
             it('.write(buffer, begin, end, value)', () => {
-                const bufferA = Buffer.from([0x00]);
-                const bufferB = Buffer.from([0x01]);
-                formatType.write(bufferA, 0, 0, 0x01);
-                expect(bufferA.compare(bufferB)).toBe(0);
+                const buffer = Buffer.from('00', 'hex');
+                formatType.write(buffer, 0, 0, 0x01);
+                expect(buffer).toEqual(Buffer.from('01', 'hex'));
             });
         });
 
@@ -137,14 +134,13 @@ describe('Formats', () => {
                 expect(formatType.primitive).toBe('number');
             });
             it('.read(buffer, begin, end)', () => {
-                const buffer = Buffer.from([0x01, 0x23]);
+                const buffer = Buffer.from('0123', 'hex');
                 expect(formatType.read(buffer, 0, 1)).toBe(0x2301);
             });
             it('.write(buffer, begin, end, value)', () => {
-                const bufferA = Buffer.from([0x00, 0x00]);
-                const bufferB = Buffer.from([0x01, 0x23]);
-                formatType.write(bufferA, 0, 1, 0x2301);
-                expect(bufferA.compare(bufferB)).toBe(0);
+                const buffer = Buffer.from('0000', 'hex');
+                formatType.write(buffer, 0, 1, 0x2301);
+                expect(buffer).toEqual(Buffer.from('0123', 'hex'));
             });
         });
 
@@ -157,14 +153,13 @@ describe('Formats', () => {
                 expect(formatType.primitive).toBe('number');
             });
             it('.read(buffer, begin, end)', () => {
-                const buffer = Buffer.from([0x01, 0x23, 0x45, 0x67]);
+                const buffer = Buffer.from('01234567', 'hex');
                 expect(formatType.read(buffer, 0, 3)).toBe(0x67452301);
             });
             it('.write(buffer, begin, end, value)', () => {
-                const bufferA = Buffer.from([0x00, 0x00, 0x00, 0x00]);
-                const bufferB = Buffer.from([0x01, 0x23, 0x45, 0x67]);
-                formatType.write(bufferA, 0, 3, 0x67452301);
-                expect(bufferA.compare(bufferB)).toBe(0);
+                const buffer = Buffer.from('00000000', 'hex');
+                formatType.write(buffer, 0, 3, 0x67452301);
+                expect(buffer).toEqual(Buffer.from('01234567', 'hex'));
             });
         });
 
@@ -177,14 +172,13 @@ describe('Formats', () => {
                 expect(formatType.primitive).toBe('bigint');
             });
             it('.read(buffer, begin, end)', () => {
-                const buffer = Buffer.from([0x01, 0x23, 0x45, 0x67, 0x89, 0xab, 0xcd, 0xef]);
+                const buffer = Buffer.from('0123456789abcdef', 'hex');
                 expect(formatType.read(buffer, 0, 7)).toBe(BigInt('0xefcdab8967452301'));
             });
             it('.write(buffer, begin, end, value)', () => {
-                const bufferA = Buffer.from([0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]);
-                const bufferB = Buffer.from([0x01, 0x23, 0x45, 0x67, 0x89, 0xab, 0xcd, 0xef]);
-                formatType.write(bufferA, 0, 7, BigInt('0xefcdab8967452301'));
-                expect(bufferA.compare(bufferB)).toBe(0);
+                const buffer = Buffer.from('0000000000000000', 'hex');
+                formatType.write(buffer, 0, 7, BigInt('0xefcdab8967452301'));
+                expect(buffer).toEqual(Buffer.from('0123456789abcdef', 'hex'));
             });
         });
 
@@ -197,14 +191,13 @@ describe('Formats', () => {
                 expect(formatType.primitive).toBe('string');
             });
             it('.read(buffer, begin, end)', () => {
-                const buffer = Buffer.from('0123456789abcdef');
-                expect(formatType.read(buffer, 0, 15)).toBe('0123456789abcdef');
+                const buffer = Buffer.from('abcdefghijklmnop');
+                expect(formatType.read(buffer, 0, 15)).toBe('abcdefghijklmnop');
             });
             it('.write(buffer, begin, end, value)', () => {
-                const bufferA = Buffer.from('0000000000000000');
-                const bufferB = Buffer.from('0123456789abcdef');
-                formatType.write(bufferA, 0, 15, ('0123456789abcdef'));
-                expect(bufferA.compare(bufferB)).toBe(0);
+                const buffer = Buffer.from('0000000000000000');
+                formatType.write(buffer, 0, 15, 'abcdefghijklmnop');
+                expect(buffer).toEqual(Buffer.from('abcdefghijklmnop'));
             });
         });
 

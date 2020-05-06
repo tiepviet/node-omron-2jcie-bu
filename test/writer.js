@@ -14,7 +14,7 @@ describe('Writer', () => {
 
         const writer = Writer();
 
-        it('<empty>', () => {
+        it('<type test>', () => {
             const privateScope = writer.privateScope();
             expect(privateScope).toBeInstanceOf(Object);
         });
@@ -25,7 +25,7 @@ describe('Writer', () => {
 
         const writer = Writer();
 
-        it('<empty>', () => {
+        it('<type test>', () => {
             const input = writer.input();
             expect(input).toBeInstanceOf(stream.Stream);
         });
@@ -36,64 +36,65 @@ describe('Writer', () => {
 
         const writer = Writer();
 
-        it('<empty>', () => {
+        it('<type test>', () => {
             const output = writer.output();
             expect(output).toBeInstanceOf(stream.Stream);
         });
 
     });
 
-    describe('.input().write(commandPayload)', () => {
+    describe('I/O', () => {
 
-        const writeAndOnceData = (writer, commandPayload) => {
-            return new Promise((resolve) => {
-                writer.output().once('data', (data) => {
-                    resolve(data);
+        const test = (commandPayloads) => {
+            return new Promise((resolve, _reject) => {
+                const frameBuffers = [];
+                const writer = Writer();
+                writer.output().on('end', () => {
+                    resolve(frameBuffers);
+                });
+                writer.output().on('data', (frameBuffer) => {
+                    frameBuffers.push(frameBuffer);
                 });
                 setImmediate(() => {
-                    writer.input().write(commandPayload);
+                    for (const commandPayload of commandPayloads) {
+                        writer.input().write(commandPayload);
+                    }
+                    writer.input().end();
                 });
             });
         };
 
         it('<read command test>', () => {
-            const writer = Writer();
-            return writeAndOnceData(writer, {
-                command: 'read',
-                address: 'ledSettingNormalState',
-                data: {},
-            }).then((frameBuffer) => {
-                expect(frameBuffer).toEqual(Buffer.from('52420500011151378b', 'hex'));
+            return test([
+                {
+                    command: 'read',
+                    address: 'ledSettingNormalState',
+                    data: {},
+                },
+            ]).then((frameBuffers) => {
+                expect(frameBuffers).toEqual([
+                    Buffer.from('52420500011151378b', 'hex'),
+                ]);
             });
         });
 
         it('<write command test>', () => {
-            const writer = Writer();
-            return writeAndOnceData(writer, {
-                command: 'write',
-                address: 'ledSettingNormalState',
-                data: {
-                    displayRuleNormalState: 1,
-                    intensityOfLedRed: 255,
-                    intensityOfLedGreen: 255,
-                    intensityOfLedBlue: 255,
+            return test([
+                {
+                    command: 'write',
+                    address: 'ledSettingNormalState',
+                    data: {
+                        displayRuleNormalState: 1,
+                        intensityOfLedRed: 255,
+                        intensityOfLedGreen: 255,
+                        intensityOfLedBlue: 255,
+                    },
                 },
-            }).then((frameBuffer) => {
-                expect(frameBuffer).toEqual(Buffer.from('52420a000211510100ffffffa245', 'hex'));
+            ]).then((frameBuffers) => {
+                expect(frameBuffers).toEqual([
+                    Buffer.from('52420a000211510100ffffffa245', 'hex'),
+                ]);
             });
-        });
-
-    });
-
-    describe('.input().end()', () => {
-
-        const writer = Writer();
-
-        it('<empty>', (callback) => {
-            writer.output().once('finish', () => {
-                callback();
-            });
-            writer.input().end();
         });
 
     });
