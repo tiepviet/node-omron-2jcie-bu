@@ -14,7 +14,7 @@
 
 ## Requirements
 
-- [Raspberry PI](https://www.raspberrypi.org/)
+- [Raspberry Pi](https://www.raspberrypi.org/)
 
 - [OMRON 2JCIE-BU](https://www.fa.omron.co.jp/products/family/3724/)
 
