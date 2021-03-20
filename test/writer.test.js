@@ -1,3 +1,10 @@
+/**
+ * node-omron-2jcie-bu/test/writer.test.js
+ * Copyright (C) e53e04ac
+ * MIT License
+ */
+
+// @ts-nocheck
 /* eslint-env mocha */
 
 'use strict';
@@ -6,24 +13,35 @@ const expect = require('expect');
 
 const stream = require('stream');
 
-const Writer = require('../lib/writer');
+const { Writer } = require('../src/lib/writer');
 
 describe('Writer', () => {
 
-    describe('.privateScope()', () => {
+    describe('.WriterConstructorOptions()', () => {
 
-        const writer = Writer();
+        const writer = Writer({});
 
         it('<type test>', () => {
-            const privateScope = writer.privateScope();
-            expect(privateScope).toBeInstanceOf(Object);
+            const _options = writer.WriterConstructorOptions();
+            expect(_options).toBeInstanceOf(Object);
+        });
+
+    });
+
+    describe('._Writer()', () => {
+
+        const writer = Writer({});
+
+        it('<type test>', () => {
+            const _it = writer._Writer();
+            expect(_it).toBeInstanceOf(Object);
         });
 
     });
 
     describe('.input()', () => {
 
-        const writer = Writer();
+        const writer = Writer({});
 
         it('<type test>', () => {
             const input = writer.input();
@@ -34,7 +52,7 @@ describe('Writer', () => {
 
     describe('.output()', () => {
 
-        const writer = Writer();
+        const writer = Writer({});
 
         it('<type test>', () => {
             const output = writer.output();
@@ -48,7 +66,7 @@ describe('Writer', () => {
         const test = (commandPayloads) => {
             return new Promise((resolve, _reject) => {
                 const frameBuffers = [];
-                const writer = Writer();
+                const writer = Writer({});
                 writer.output().on('end', () => {
                     resolve(frameBuffers);
                 });

@@ -18,13 +18,11 @@
 
 - [OMRON 2JCIE-BU](https://www.fa.omron.co.jp/products/family/3724/)
 
-- [Node.js](https://nodejs.org/en/) (v10, v12, v13, v14)
+- [Node.js](https://nodejs.org/en/) (v14, v15)
 
 -----
 
 ## Installation
-
-run the command:
 
 ~~~~~ sh
 npm install @e53e04ac/node-omron-2jcie-bu
@@ -43,7 +41,7 @@ npm install @e53e04ac/node-omron-2jcie-bu
 
     (async () => {
 
-        const controller = omron2jciebu({ path: '/dev/ttyUSB0' });
+        const controller = omron2jciebu.Controller({ path: '/dev/ttyUSB0' });
 
         await controller.open();
 
@@ -80,7 +78,7 @@ npm install @e53e04ac/node-omron-2jcie-bu
 
     (async () => {
 
-        const controller = omron2jciebu({ path: '/dev/ttyUSB0' });
+        const controller = omron2jciebu.Controller({ path: '/dev/ttyUSB0' });
 
         await controller.open();
 
@@ -135,14 +133,6 @@ npm install @e53e04ac/node-omron-2jcie-bu
         seismicIntensityFlag: 0
     }
     ~~~~~
-
------
-
-## Documentation
-
-- [API](docs/api)
-
-- [Internal API](docs/internal-api)
 
 -----
 

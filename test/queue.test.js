@@ -1,3 +1,10 @@
+/**
+ * node-omron-2jcie-bu/test/queue.test.js
+ * Copyright (C) e53e04ac
+ * MIT License
+ */
+
+// @ts-nocheck
 /* eslint-env mocha */
 
 'use strict';
@@ -6,24 +13,35 @@ const expect = require('expect');
 
 const stream = require('stream');
 
-const Queue = require('../lib/queue');
+const { Queue } = require('../src/lib/queue');
 
 describe('Queue', () => {
 
-    describe('.privateScope()', () => {
+    describe('.QueueConstructorOptions()', () => {
 
-        const queue = Queue();
+        const queue = Queue({});
 
         it('<type test>', () => {
-            const privateScope = queue.privateScope();
-            expect(privateScope).toBeInstanceOf(Object);
+            const _options = queue.QueueConstructorOptions();
+            expect(_options).toBeInstanceOf(Object);
+        });
+
+    });
+
+    describe('._Queue()', () => {
+
+        const queue = Queue({});
+
+        it('<type test>', () => {
+            const _it = queue._Queue();
+            expect(_it).toBeInstanceOf(Object);
         });
 
     });
 
     describe('.input()', () => {
 
-        const queue = Queue();
+        const queue = Queue({});
 
         it('<type test>', () => {
             const input = queue.input();
@@ -34,7 +52,7 @@ describe('Queue', () => {
 
     describe('.output()', () => {
 
-        const queue = Queue();
+        const queue = Queue({});
 
         it('<type test>', () => {
             const output = queue.output();
@@ -46,7 +64,7 @@ describe('Queue', () => {
     describe('.enqueue(commandPayload)', () => {
 
         it('<read response test>', () => {
-            const queue = Queue();
+            const queue = Queue({});
             const task = queue.enqueue({
                 command: 'read',
                 address: 'ledSettingNormalState',
@@ -83,7 +101,7 @@ describe('Queue', () => {
         });
 
         it('<write response test>', () => {
-            const queue = Queue();
+            const queue = Queue({});
             const task = queue.enqueue({
                 command: 'write',
                 address: 'ledSettingNormalState',
@@ -125,7 +143,7 @@ describe('Queue', () => {
         });
 
         it('<read error response test>', () => {
-            const queue = Queue();
+            const queue = Queue({});
             const task = queue.enqueue({
                 command: 'read',
                 address: 'ledSettingNormalState',
@@ -156,7 +174,7 @@ describe('Queue', () => {
         });
 
         it('<write error response test>', () => {
-            const queue = Queue();
+            const queue = Queue({});
             const task = queue.enqueue({
                 command: 'write',
                 address: 'ledSettingNormalState',
@@ -192,7 +210,7 @@ describe('Queue', () => {
         });
 
         it('<unknown response test>', () => {
-            const queue = Queue();
+            const queue = Queue({});
             const task = queue.enqueue({
                 command: 'write',
                 address: 'ledSettingNormalState',
@@ -228,7 +246,7 @@ describe('Queue', () => {
         });
 
         it('<multiple responses test>', () => {
-            const queue = Queue();
+            const queue = Queue({});
             const task = queue.enqueue({
                 command: 'read',
                 address: 'memoryDataShort',
@@ -318,7 +336,7 @@ describe('Queue', () => {
         });
 
         it('<busy test>', () => {
-            const queue = Queue();
+            const queue = Queue({});
             const tasks = [];
             tasks.push(queue.enqueue({
                 command: 'read',
@@ -363,7 +381,7 @@ describe('Queue', () => {
         });
 
         it('<timeout response test>', () => {
-            const queue = Queue();
+            const queue = Queue({});
             const task = queue.enqueue({
                 command: 'write',
                 address: 'ledSettingNormalState',
@@ -387,7 +405,7 @@ describe('Queue', () => {
         });
 
         it('<abort test>', () => {
-            const queue = Queue();
+            const queue = Queue({});
             const task = queue.enqueue({
                 command: 'write',
                 address: 'ledSettingNormalState',
@@ -413,7 +431,7 @@ describe('Queue', () => {
         });
 
         it('<abort twice test>', () => {
-            const queue = Queue();
+            const queue = Queue({});
             const task = queue.enqueue({
                 command: 'write',
                 address: 'ledSettingNormalState',
@@ -440,7 +458,7 @@ describe('Queue', () => {
         });
 
         it('<disordered response test>', () => {
-            const queue = Queue();
+            const queue = Queue({});
             queue.input().write({
                 command: 'write',
                 address: 'ledSettingNormalState',

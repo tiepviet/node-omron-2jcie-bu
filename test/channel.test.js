@@ -1,3 +1,10 @@
+/**
+ * node-omron-2jcie-bu/test/channel.test.js
+ * Copyright (C) e53e04ac
+ * MIT License
+ */
+
+// @ts-nocheck
 /* eslint-env mocha */
 
 'use strict';
@@ -6,9 +13,9 @@ const expect = require('expect');
 
 const stream = require('stream');
 
-const ChannelVirtual = require('./channel-virtual');
+const { ChannelVirtual } = require('./channel-virtual');
 
-const Channel = require('../lib/channel');
+const { Channel } = require('../src/lib/channel');
 
 describe('Channel', () => {
 
@@ -16,11 +23,20 @@ describe('Channel', () => {
         path: ChannelVirtual,
     });
 
-    describe('.privateScope()', () => {
+    describe('.ChannelConstructorOptions()', () => {
 
         it('<empty>', () => {
-            const privateScope = channel.privateScope();
-            expect(privateScope).toBeInstanceOf(Object);
+            const _options = channel.ChannelConstructorOptions();
+            expect(_options).toBeInstanceOf(Object);
+        });
+
+    });
+
+    describe('._Channel()', () => {
+
+        it('<empty>', () => {
+            const _it = channel._Channel();
+            expect(_it).toBeInstanceOf(Object);
         });
 
     });

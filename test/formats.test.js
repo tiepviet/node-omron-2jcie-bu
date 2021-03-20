@@ -1,18 +1,34 @@
+/**
+ * node-omron-2jcie-bu/test/formats.test.js
+ * Copyright (C) e53e04ac
+ * MIT License
+ */
+
+// @ts-nocheck
 /* eslint-env mocha */
 
 'use strict';
 
 const expect = require('expect');
 
-const Formats = require('../lib/formats');
+const { Formats } = require('../src/lib/formats');
 
 describe('Formats', () => {
 
-    describe('.privateScope()', () => {
+    describe('.FormatsConstructorOptions()', () => {
 
         it('<type test>', () => {
-            const privateScope = Formats.privateScope();
-            expect(privateScope).toBeInstanceOf(Object);
+            const _options = Formats.FormatsConstructorOptions();
+            expect(_options).toBeInstanceOf(Object);
+        });
+
+    });
+
+    describe('._Formats()', () => {
+
+        it('<type test>', () => {
+            const _it = Formats._Formats();
+            expect(_it).toBeInstanceOf(Object);
         });
 
     });

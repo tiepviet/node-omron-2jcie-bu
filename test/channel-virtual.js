@@ -1,38 +1,20 @@
+/**
+ * node-omron-2jcie-bu/test/channel-virtual.js
+ * Copyright (C) e53e04ac
+ * MIT License
+ */
+
+// @ts-nocheck
+
 'use strict';
 
-/**
- * @private
- */
 const MockBinding = require('@serialport/binding-mock');
 
-/**
- * @private
- */
-const Commands = require('../lib/commands');
+const { Commands } = require('../src/lib/commands');
+const { Addresses } = require('../src/lib/addresses');
+const { Contents } = require('../src/lib/contents');
+const { Utilities } = require('../src/lib/utilities');
 
-/**
- * @private
- */
-const Addresses = require('../lib/addresses');
-
-/**
- * @private
- */
-const Contents = require('../lib/contents');
-
-/**
- * @private
- */
-const Utilities = require('../lib/utilities');
-
-/**
- * @public
- * @function
- * @param {{
- *   SerialPort: typeof import('serialport');
- * }} options
- * @return {void} 
- */
 const ChannelVirtual = (options) => {
     const virtual = {};
     virtual.path = ':virtual:';
@@ -51,13 +33,13 @@ const ChannelVirtual = (options) => {
                     this.buffer = this.buffer.slice(lastAcceptableRange.end);
                     for (const acceptableFrameRange of acceptableFrameRanges) {
                         const frameBuffer = buffer.slice(acceptableFrameRange.start, acceptableFrameRange.end);
-                        const commandFrame = Utilities.privateScope().unpackFrame(frameBuffer);
-                        const commandPayload = Utilities.privateScope().unpackPayload(commandFrame.payloadBuffer);
+                        const commandFrame = Utilities._Utilities().unpackFrame(frameBuffer);
+                        const commandPayload = Utilities._Utilities().unpackPayload(commandFrame.payloadBuffer);
                         const commandType = Commands.find(commandPayload.commandValue);
                         const addressType = Addresses.find(commandPayload.addressValue);
-                        const commandDataType = Utilities.privateScope().selectCommandDataType(addressType, commandType);
-                        const commandData = Utilities.privateScope().unpackData(commandDataType, commandPayload.dataBuffer);
-                        const responseDataType = Utilities.privateScope().selectResponseDataType(addressType, commandType);
+                        const commandDataType = Utilities._Utilities().selectCommandDataType(addressType, commandType);
+                        const commandData = Utilities._Utilities().unpackData(commandDataType, commandPayload.dataBuffer);
+                        const responseDataType = Utilities._Utilities().selectResponseDataType(addressType, commandType);
                         const responseData = {};
                         for (const fieldType of responseDataType.fieldTypes) {
                             const contentType = Contents.find(fieldType.content);
@@ -76,13 +58,13 @@ const ChannelVirtual = (options) => {
                                     responseData[fieldType.name] = contentType.encode('');
                             }
                         }
-                        const responseDataBuffer = Utilities.privateScope().packData(responseDataType, responseData);
-                        const responsePayload = Utilities.privateScope().packPayload({
+                        const responseDataBuffer = Utilities._Utilities().packData(responseDataType, responseData);
+                        const responsePayload = Utilities._Utilities().packPayload({
                             commandValue: commandType.value,
                             addressValue: addressType.value,
                             dataBuffer: responseDataBuffer
                         });
-                        const responseFrame = Utilities.privateScope().packFrame({
+                        const responseFrame = Utilities._Utilities().packFrame({
                             payloadBuffer: responsePayload
                         });
                         this.emitData(responseFrame);
@@ -97,7 +79,4 @@ const ChannelVirtual = (options) => {
     return virtual.path;
 };
 
-/**
- * @public
- */
-module.exports = ChannelVirtual;
+module.exports = { ChannelVirtual };

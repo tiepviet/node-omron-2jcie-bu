@@ -1,12 +1,19 @@
+/**
+ * node-omron-2jcie-bu/test/controller.test.js
+ * Copyright (C) e53e04ac
+ * MIT License
+ */
+
+// @ts-nocheck
 /* eslint-env mocha */
 
 'use strict';
 
 const expect = require('expect');
 
-const ChannelVirtual = require('./channel-virtual');
+const { ChannelVirtual } = require('./channel-virtual');
 
-const Controller = require('../lib/controller');
+const { Controller } = require('../src/lib/controller');
 
 describe('Controller', () => {
 
@@ -14,11 +21,20 @@ describe('Controller', () => {
         path: ChannelVirtual,
     });
 
-    describe('.privateScope()', () => {
+    describe('.ControllerConstructorOptions()', () => {
 
         it('<empty>', () => {
-            const privateScope = controller.privateScope();
-            expect(privateScope).toBeInstanceOf(Object);
+            const _options = controller.ControllerConstructorOptions();
+            expect(_options).toBeInstanceOf(Object);
+        });
+
+    });
+
+    describe('._Controller()', () => {
+
+        it('<empty>', () => {
+            const _it = controller._Controller();
+            expect(_it).toBeInstanceOf(Object);
         });
 
     });

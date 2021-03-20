@@ -1,18 +1,34 @@
+/**
+ * node-omron-2jcie-bu/test/contents.test.js
+ * Copyright (C) e53e04ac
+ * MIT License
+ */
+
+// @ts-nocheck
 /* eslint-env mocha */
 
 'use strict';
 
 const expect = require('expect');
 
-const Contents = require('../lib/contents');
+const { Contents } = require('../src/lib/contents');
 
 describe('Contents', () => {
 
-    describe('.privateScope()', () => {
+    describe('.ContentsConstructorOptions()', () => {
 
         it('<type test>', () => {
-            const privateScope = Contents.privateScope();
-            expect(privateScope).toBeInstanceOf(Object);
+            const _options = Contents.ContentsConstructorOptions();
+            expect(_options).toBeInstanceOf(Object);
+        });
+
+    });
+
+    describe('._Contents()', () => {
+
+        it('<type test>', () => {
+            const _it = Contents._Contents();
+            expect(_it).toBeInstanceOf(Object);
         });
 
     });

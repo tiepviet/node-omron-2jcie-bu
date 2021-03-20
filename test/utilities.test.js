@@ -1,18 +1,34 @@
+/**
+ * node-omron-2jcie-bu/test/utilities.test.js
+ * Copyright (C) e53e04ac
+ * MIT License
+ */
+
+// @ts-nocheck
 /* eslint-env mocha */
 
 'use strict';
 
 const expect = require('expect');
 
-const Utilities = require('../lib/utilities');
+const { Utilities } = require('../src/lib/utilities');
 
 describe('Utilities', () => {
 
-    describe('.privateScope()', () => {
+    describe('.UtilitiesConstructorOptions()', () => {
 
         it('<type test>', () => {
-            const privateScope = Utilities.privateScope();
-            expect(privateScope).toBeInstanceOf(Object);
+            const _options = Utilities.UtilitiesConstructorOptions();
+            expect(_options).toBeInstanceOf(Object);
+        });
+
+    });
+
+    describe('._Utilities()', () => {
+
+        it('<type test>', () => {
+            const _it = Utilities._Utilities();
+            expect(_it).toBeInstanceOf(Object);
         });
 
     });

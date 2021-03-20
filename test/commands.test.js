@@ -1,18 +1,34 @@
+/**
+ * node-omron-2jcie-bu/test/commands.test.js
+ * Copyright (C) e53e04ac
+ * MIT License
+ */
+
+// @ts-nocheck
 /* eslint-env mocha */
 
 'use strict';
 
 const expect = require('expect');
 
-const Commands = require('../lib/commands');
+const { Commands } = require('../src/lib/commands');
 
 describe('Commands', () => {
 
-    describe('.privateScope()', () => {
+    describe('.CommandsConstructorOptions()', () => {
 
         it('<type test>', () => {
-            const privateScope = Commands.privateScope();
-            expect(privateScope).toBeInstanceOf(Object);
+            const _options = Commands.CommandsConstructorOptions();
+            expect(_options).toBeInstanceOf(Object);
+        });
+
+    });
+
+    describe('._Commands()', () => {
+
+        it('<type test>', () => {
+            const _it = Commands._Commands();
+            expect(_it).toBeInstanceOf(Object);
         });
 
     });

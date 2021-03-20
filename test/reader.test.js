@@ -1,3 +1,10 @@
+/**
+ * node-omron-2jcie-bu/test/reader.test.js
+ * Copyright (C) e53e04ac
+ * MIT License
+ */
+
+// @ts-nocheck
 /* eslint-env mocha */
 
 'use strict';
@@ -6,24 +13,35 @@ const expect = require('expect');
 
 const stream = require('stream');
 
-const Reader = require('../lib/reader');
+const { Reader } = require('../src/lib/reader');
 
 describe('Reader', () => {
 
-    describe('.privateScope()', () => {
+    describe('.ReaderConstructorOptions()', () => {
 
-        const reader = Reader();
+        const reader = Reader({});
 
         it('<type test>', () => {
-            const privateScope = reader.privateScope();
-            expect(privateScope).toBeInstanceOf(Object);
+            const _options = reader.ReaderConstructorOptions();
+            expect(_options).toBeInstanceOf(Object);
+        });
+
+    });
+
+    describe('._Reader()', () => {
+
+        const reader = Reader({});
+
+        it('<type test>', () => {
+            const _it = reader._Reader();
+            expect(_it).toBeInstanceOf(Object);
         });
 
     });
 
     describe('.input()', () => {
 
-        const reader = Reader();
+        const reader = Reader({});
 
         it('<type test>', () => {
             const input = reader.input();
@@ -34,7 +52,7 @@ describe('Reader', () => {
 
     describe('.output()', () => {
 
-        const reader = Reader();
+        const reader = Reader({});
 
         it('<type test>', () => {
             const output = reader.output();
@@ -48,7 +66,7 @@ describe('Reader', () => {
         const test = (buffers, stride) => {
             return new Promise((resolve, _reject) => {
                 const frameBuffers = [];
-                const reader = Reader();
+                const reader = Reader({});
                 reader.output().on('end', () => {
                     resolve(frameBuffers);
                 });

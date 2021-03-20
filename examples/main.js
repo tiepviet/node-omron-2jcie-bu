@@ -8,7 +8,7 @@
 
 const readline = require('readline');
 
-const omron2jciebu = require('./');
+const omron2jciebu = require('../');
 
 async function main() {
 
@@ -16,7 +16,7 @@ async function main() {
 
     const keyboard = readline.createInterface(process.stdin);
 
-    const controller = omron2jciebu({
+    const controller = omron2jciebu.Controller({
         path: serialPortPath,
     });
 

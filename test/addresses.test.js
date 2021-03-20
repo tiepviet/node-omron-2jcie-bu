@@ -1,18 +1,34 @@
+/**
+ * node-omron-2jcie-bu/test/addresses.test.js
+ * Copyright (C) e53e04ac
+ * MIT License
+ */
+
+// @ts-nocheck
 /* eslint-env mocha */
 
 'use strict';
 
 const expect = require('expect');
 
-const Addresses = require('../lib/addresses');
+const { Addresses } = require('../src/lib/addresses');
 
 describe('Addresses', () => {
 
-    describe('.privateScope()', () => {
+    describe('.AddressesConstructorOptions()', () => {
 
         it('<type test>', () => {
-            const privateScope = Addresses.privateScope();
-            expect(privateScope).toBeInstanceOf(Object);
+            const _options = Addresses.AddressesConstructorOptions();
+            expect(_options).toBeInstanceOf(Object);
+        });
+
+    });
+
+    describe('._Addresses()', () => {
+
+        it('<type test>', () => {
+            const _it = Addresses._Addresses();
+            expect(_it).toBeInstanceOf(Object);
         });
 
     });
