@@ -1,4 +1,6 @@
 # node-omron-2jcie-bu
+This repository was forked from https://github.com/e53e04ac/node-omron-2jcie-bu for updating package version.
+
 
 [![npm version](https://badge.fury.io/js/%40e53e04ac%2Fnode-omron-2jcie-bu.svg)](https://badge.fury.io/js/%40e53e04ac%2Fnode-omron-2jcie-bu)
 [![Build Status](https://travis-ci.org/e53e04ac/node-omron-2jcie-bu.svg?branch=master)](https://travis-ci.org/e53e04ac/node-omron-2jcie-bu)
@@ -25,7 +27,7 @@
 ## Installation
 
 ~~~~~ sh
-npm install @e53e04ac/node-omron-2jcie-bu
+npm install node-omron-2jcie-bu
 ~~~~~
 
 -----
@@ -37,7 +39,7 @@ npm install @e53e04ac/node-omron-2jcie-bu
 1. save a file: `example-set-led-light-color.js`
 
     ~~~~~ js
-    const omron2jciebu = require('@e53e04ac/node-omron-2jcie-bu');
+    const omron2jciebu = require('node-omron-2jcie-bu');
 
     (async () => {
 
@@ -74,7 +76,7 @@ npm install @e53e04ac/node-omron-2jcie-bu
 1. save a file: `example-get-sensor-data.js`
 
     ~~~~~ js
-    const omron2jciebu = require('@e53e04ac/node-omron-2jcie-bu');
+    const omron2jciebu = require('node-omron-2jcie-bu');
 
     (async () => {
 
